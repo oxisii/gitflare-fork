@@ -30,7 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authClient } from "@/lib/auth-client";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_layout/settings")({
   component: RouteComponent,
@@ -122,6 +122,7 @@ function RouteComponent() {
             name={user?.name ?? "NO_NAME"}
             username={user?.username ?? "NO_USERNAME"}
           />
+          <LanguageSettings />
         </TabsContent>
 
         <TabsContent value="tokens">
@@ -252,6 +253,32 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
           {t("settings.saveChanges")}
         </Button>
       </form>
+    </div>
+  );
+}
+
+function LanguageSettings() {
+  const t = useT();
+  const { locale, setLocale } = useLocale();
+  return (
+    <div className="mt-6 rounded-lg border p-6">
+      <h2 className="mb-4 font-semibold text-lg">{t("settings.language")}</h2>
+      <div className="flex gap-2">
+        <Button
+          onClick={() => setLocale("zh")}
+          type="button"
+          variant={locale === "zh" ? "default" : "outline"}
+        >
+          {t("settings.languageZh")}
+        </Button>
+        <Button
+          onClick={() => setLocale("en")}
+          type="button"
+          variant={locale === "en" ? "default" : "outline"}
+        >
+          {t("settings.languageEn")}
+        </Button>
+      </div>
     </div>
   );
 }

@@ -9,16 +9,19 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "./ui/skeleton";
 
 export function UserProfileButton() {
   const t = useT();
+  const { locale, setLocale } = useLocale();
   const { data, isLoading } = useQuery(getSessionOptions);
 
   // here we explicitly check for undefined and null
@@ -98,6 +101,25 @@ export function UserProfileButton() {
           <DropdownMenuItem asChild>
             <Link to="/settings">{t("nav.settings")}</Link>
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel className="text-muted-foreground text-xs">
+            {t("settings.language")}
+          </DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            onValueChange={(value) => {
+              if (value === "en" || value === "zh") {
+                setLocale(value);
+              }
+            }}
+            value={locale}
+          >
+            <DropdownMenuRadioItem value="zh">
+              {t("settings.languageZh")}
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="en">
+              {t("settings.languageEn")}
+            </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={async () => {

@@ -4,7 +4,7 @@ import { NotFoundComponent } from "@/components/404-components";
 import { GitHubIcon } from "@/components/github";
 import { buttonVariants } from "@/components/ui/button";
 import { UserProfileButton } from "@/components/user-profile-button";
-import { LanguageToggle, useT } from "@/lib/i18n";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -25,7 +25,6 @@ function HomeComponent() {
               </span>
             </Link>
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-              <LanguageToggle />
               <UserProfileButton />
             </div>
           </div>

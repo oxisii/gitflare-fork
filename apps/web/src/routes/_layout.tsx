@@ -2,7 +2,7 @@ import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { GitBranchIcon } from "lucide-react";
 import { ErrorComponent } from "@/components/error-component";
 import { UserProfileButton } from "@/components/user-profile-button";
-import { LanguageToggle, useT } from "@/lib/i18n";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_layout")({
   component: RouteComponent,
@@ -23,7 +23,6 @@ function RouteComponent() {
               </span>
             </Link>
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-              <LanguageToggle />
               <UserProfileButton />
             </div>
           </div>

@@ -10,7 +10,7 @@ import {
 
 const en = {
   // App
-  "app.name": "GitVex",
+  "app.name": "Gitflare",
 
   // Navigation / User Menu
   "nav.signIn": "Sign In",
@@ -40,7 +40,7 @@ const en = {
 
   // Sign Up
   "signUp.title": "Create an account",
-  "signUp.description": "Sign up to get started with GitVex.",
+  "signUp.description": "Sign up to get started with Gitflare.",
   "signUp.name": "Name",
   "signUp.namePlaceholder": "Jane Doe",
   "signUp.username": "Username",
@@ -58,15 +58,15 @@ const en = {
   "signUp.shortUsername": "Username must be at least 3 characters",
 
   // Homepage
-  "home.title": "GitVex",
+  "home.title": "Gitflare",
   "home.tagline": "Open source, serverless git hosting.",
   "home.description":
-    "GitVex is a fully open-source serverless git hosting platform. No VMs, No Containers, Just Durable Objects.",
+    "Gitflare is a fully open-source serverless git hosting platform. No VMs, No Containers, Just Durable Objects.",
   "home.getStarted": "Get Started",
   "home.featuresTitle": "Features",
   "home.featureServerless": "Serverless",
   "home.featureServerlessDesc":
-    "No servers to manage. GitVex runs on Cloudflare's global network.",
+    "No servers to manage. Gitflare runs on Cloudflare's global network.",
   "home.featureDurable": "Durable Objects",
   "home.featureDurableDesc":
     "Git repositories stored in SQLite via Durable Objects for reliability.",
@@ -75,12 +75,12 @@ const en = {
     "100% open source. Self-host on your own Cloudflare account.",
   "home.featureFast": "Fast",
   "home.featureFastDesc": "Global edge network ensures low latency everywhere.",
-  "home.startNow": "Start using GitVex today",
+  "home.startNow": "Start using Gitflare today",
   "home.startNowDesc":
     "Create your account and start hosting repositories in minutes.",
   "home.createAccount": "Create Account",
-  "home.footer": "GitVex. Built with Cloudflare Workers & Durable Objects.",
-  "home.logo": "GitVex",
+  "home.footer": "Gitflare. Built with Cloudflare Workers & Durable Objects.",
+  "home.logo": "Gitflare",
   "home.builtWith": "Built With",
   "home.giveStar": "Give a Star",
   "home.github": "GitHub",
@@ -169,6 +169,9 @@ const en = {
   "settings.failedDeletePat": "Failed to delete personal access token",
   "settings.tokenNameMin": "Token name must be at least 3 characters",
   "settings.tokenNameMax": "Token name must be at most 50 characters",
+  "settings.language": "Language",
+  "settings.languageZh": "中文",
+  "settings.languageEn": "English",
 
   // Profile
   "profile.repositories": "Repositories",
@@ -302,7 +305,7 @@ const en = {
 } satisfies Record<string, string>;
 
 const zh: Record<string, string> = {
-  "app.name": "GitVex",
+  "app.name": "Gitflare",
 
   "nav.signIn": "登录",
   "nav.signUp": "注册",
@@ -329,7 +332,7 @@ const zh: Record<string, string> = {
   "signIn.shortPassword": "密码至少需要8个字符",
 
   "signUp.title": "创建账户",
-  "signUp.description": "注册以开始使用 GitVex。",
+  "signUp.description": "注册以开始使用 Gitflare。",
   "signUp.name": "姓名",
   "signUp.namePlaceholder": "张三",
   "signUp.username": "用户名",
@@ -346,15 +349,15 @@ const zh: Record<string, string> = {
   "signUp.shortName": "姓名至少需要2个字符",
   "signUp.shortUsername": "用户名至少需要3个字符",
 
-  "home.title": "GitVex",
+  "home.title": "Gitflare",
   "home.tagline": "开源、无服务器的 Git 托管平台。",
   "home.description":
-    "GitVex 是一个完全开源的无服务器 Git 托管平台。无需虚拟机，无需容器，只需 Durable Objects。",
+    "Gitflare 是一个完全开源的无服务器 Git 托管平台。无需虚拟机，无需容器，只需 Durable Objects。",
   "home.getStarted": "开始使用",
   "home.featuresTitle": "功能特性",
   "home.featureServerless": "无服务器",
   "home.featureServerlessDesc":
-    "无需管理服务器。GitVex 运行在 Cloudflare 的全球网络上。",
+    "无需管理服务器。Gitflare 运行在 Cloudflare 的全球网络上。",
   "home.featureDurable": "Durable Objects",
   "home.featureDurableDesc":
     "通过 Durable Objects 将 Git 仓库存储在 SQLite 中，安全可靠。",
@@ -363,11 +366,11 @@ const zh: Record<string, string> = {
     "100% 开源。在您自己的 Cloudflare 账号上自托管。",
   "home.featureFast": "快速",
   "home.featureFastDesc": "全球边缘网络确保低延迟访问。",
-  "home.startNow": "立即开始使用 GitVex",
+  "home.startNow": "立即开始使用 Gitflare",
   "home.startNowDesc": "创建账户，几分钟内即可开始托管仓库。",
   "home.createAccount": "创建账户",
-  "home.footer": "GitVex。基于 Cloudflare Workers 与 Durable Objects 构建。",
-  "home.logo": "GitVex",
+  "home.footer": "Gitflare。基于 Cloudflare Workers 与 Durable Objects 构建。",
+  "home.logo": "Gitflare",
   "home.builtWith": "技术栈",
   "home.giveStar": "去 GitHub 点个 Star",
   "home.github": "GitHub",
@@ -448,6 +451,9 @@ const zh: Record<string, string> = {
   "settings.failedDeletePat": "删除个人访问令牌失败",
   "settings.tokenNameMin": "令牌名称至少需要3个字符",
   "settings.tokenNameMax": "令牌名称不能超过50个字符",
+  "settings.language": "语言",
+  "settings.languageZh": "中文",
+  "settings.languageEn": "English",
 
   "profile.repositories": "仓库",
   "profile.noRepos": "暂无仓库",

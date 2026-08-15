@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { GitBranchIcon } from "lucide-react";
 import { NotFoundComponent } from "@/components/404-components";
 import SignInForm from "@/components/sign-in-form";
-import { useT } from "@/lib/i18n";
+import { LanguageToggle, useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
@@ -20,6 +20,7 @@ function RouteComponent() {
         </a>
       </div>
       <SignInForm />
+      <LanguageToggle />
     </div>
   );
 }
