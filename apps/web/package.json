@@ -6,7 +6,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "dev": "NODE_TLS_REJECT_UNAUTHORIZED='0' alchemy dev",
-    "deploy": "alchemy deploy",
+    "deploy": "node ./scripts/cf-deploy.mjs",
     "deploy:cf": "node ./scripts/cf-deploy.mjs",
     "destroy": "alchemy destroy",
     "test": "vitest run",

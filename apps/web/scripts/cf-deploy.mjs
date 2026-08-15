@@ -4,6 +4,16 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const webRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+const build = spawnSync("pnpm", ["build"], {
+  cwd: webRoot,
+  stdio: "inherit",
+  env: process.env,
+});
+if (build.status) {
+  process.exit(build.status);
+}
+
 const wranglerPath = join(webRoot, "dist/server/wrangler.json");
 
 const config = JSON.parse(readFileSync(wranglerPath, "utf8"));
