@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { diffsStyleVariables, fileOptions } from "@/lib/diffs-config";
+import { useT } from "@/lib/i18n";
 import { formatBytes, getMimeType } from "@/lib/utils";
 
 const LazyDiffsFile = lazy(() =>
@@ -64,6 +65,7 @@ function BlobPendingComponent() {
 }
 
 function RouteComponent() {
+  const t = useT();
   const params = Route.useParams();
   const search = Route.useSearch();
   const { owner, repo } = params;
@@ -85,9 +87,11 @@ function RouteComponent() {
       <div className="py-6">
         <div className="flex flex-col items-center justify-center rounded-lg border py-12 text-center">
           <FileIcon className="mb-4 size-12 text-muted-foreground" />
-          <h3 className="mb-2 font-semibold text-lg">File not found</h3>
+          <h3 className="mb-2 font-semibold text-lg">
+            {t("blob.fileNotFound")}
+          </h3>
           <p className="text-muted-foreground text-sm">
-            The requested file could not be found.
+            {t("blob.fileNotFoundDesc")}
           </p>
         </div>
       </div>
@@ -169,7 +173,7 @@ function RouteComponent() {
                 target="_blank"
                 to="/$owner/$repo/raw"
               >
-                Raw
+                {t("blob.raw")}
               </Link>
             </Button>
             {!blob.isBinary && (
@@ -252,6 +256,7 @@ function BlobContent({
   contentBase64,
   size,
 }: BlobContentProps) {
+  const t = useT();
   const isMarkdown = filename.toLowerCase().match(/\.(md|mdx|markdown)$/);
   const isImage = filename
     .toLowerCase()
@@ -277,9 +282,9 @@ function BlobContent({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <FileIcon className="mb-4 size-12 text-muted-foreground" />
-        <h3 className="mb-2 font-semibold text-lg">Binary file</h3>
+        <h3 className="mb-2 font-semibold text-lg">{t("blob.binaryFile")}</h3>
         <p className="text-muted-foreground text-sm">
-          This file cannot be displayed because it is a binary file.
+          {t("blob.binaryFileDesc")}
         </p>
         <p className="mt-2 text-muted-foreground text-xs">
           Size: {formatBytes(size, { decimals: 2 })}

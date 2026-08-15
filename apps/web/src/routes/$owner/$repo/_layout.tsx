@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserProfileButton } from "@/components/user-profile-button";
+import { useT } from "@/lib/i18n";
 
 const searchSchema = z.object({
   ref: z.string().optional(),
@@ -55,6 +56,7 @@ export const Route = createFileRoute("/$owner/$repo/_layout")({
 });
 
 function RouteComponent() {
+  const t = useT();
   const params = Route.useParams();
   const { owner, repo } = params;
 
@@ -162,7 +164,7 @@ function RouteComponent() {
                 <TabsTrigger asChild value="code">
                   <Link params={params} search={{ ref }} to="/$owner/$repo">
                     <CodeIcon className="opacity-60" />
-                    Code
+                    {t("repo.code")}
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger asChild value="commits">
@@ -172,26 +174,26 @@ function RouteComponent() {
                     to="/$owner/$repo/commits"
                   >
                     <GitCommitHorizontalIcon className="opacity-60" />
-                    Commits
+                    {t("repo.commits")}
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger asChild value="issues">
                   <Link params={params} to="/$owner/$repo/issues">
                     <CircleDotIcon className="opacity-60" />
-                    Issues
+                    {t("repo.issues")}
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger asChild value="pulls">
                   <Link params={params} to="/$owner/$repo/pulls">
                     <GitPullRequestIcon className="opacity-60" />
-                    Pull Requests
+                    {t("repo.pullRequests")}
                   </Link>
                 </TabsTrigger>
                 {isOwner && (
                   <TabsTrigger asChild value="settings">
                     <Link params={params} to="/$owner/$repo/settings">
                       <SettingsIcon className="opacity-60" />
-                      Settings
+                      {t("repo.settings")}
                     </Link>
                   </TabsTrigger>
                 )}

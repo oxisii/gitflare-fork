@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
+import { useT } from "@/lib/i18n";
 import { Button, buttonVariants } from "./ui/button";
 import {
   Card,
@@ -15,6 +16,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
 export default function SignUpForm() {
+  const t = useT();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -37,7 +39,7 @@ export default function SignUpForm() {
             navigate({
               to: "/dashboard",
             });
-            toast.success("Sign up successful");
+            toast.success(t("signUp.success"));
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);
@@ -47,10 +49,10 @@ export default function SignUpForm() {
     },
     validators: {
       onSubmit: z.object({
-        name: z.string().min(2, "Name must be at least 2 characters"),
-        email: z.email("Invalid email address"),
-        password: z.string().min(8, "Password must be at least 8 characters"),
-        username: z.string().min(3, "Username must be at least 3 characters"),
+        name: z.string().min(2, t("signUp.shortName")),
+        email: z.email(t("signUp.invalidEmail")),
+        password: z.string().min(8, t("signUp.shortPassword")),
+        username: z.string().min(3, t("signUp.shortUsername")),
       }),
     },
   });
@@ -58,8 +60,8 @@ export default function SignUpForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>Sign up to get started with GitVex.</CardDescription>
+        <CardTitle>{t("signUp.title")}</CardTitle>
+        <CardDescription>{t("signUp.description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -74,13 +76,13 @@ export default function SignUpForm() {
             <form.Field name="name">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Name</Label>
+                  <Label htmlFor={field.name}>{t("signUp.name")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="Jane Doe"
+                    placeholder={t("signUp.namePlaceholder")}
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
@@ -97,13 +99,13 @@ export default function SignUpForm() {
             <form.Field name="username">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Username</Label>
+                  <Label htmlFor={field.name}>{t("signUp.username")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="janedoe"
+                    placeholder={t("signUp.usernamePlaceholder")}
                     value={field.state.value}
                   />
                   {field.state.meta.errors.map((error) => (
@@ -120,13 +122,13 @@ export default function SignUpForm() {
             <form.Field name="email">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Email</Label>
+                  <Label htmlFor={field.name}>{t("signUp.email")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="name@example.com"
+                    placeholder={t("signUp.emailPlaceholder")}
                     type="email"
                     value={field.state.value}
                   />
@@ -144,13 +146,13 @@ export default function SignUpForm() {
             <form.Field name="password">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>Password</Label>
+                  <Label htmlFor={field.name}>{t("signUp.password")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder="At least 8 characters"
+                    placeholder={t("signUp.passwordPlaceholder")}
                     type="password"
                     value={field.state.value}
                   />
@@ -172,7 +174,7 @@ export default function SignUpForm() {
                 loading={state.isSubmitting}
                 type="submit"
               >
-                Sign Up
+                {t("signUp.signUp")}
               </Button>
             )}
           </form.Subscribe>
@@ -180,7 +182,7 @@ export default function SignUpForm() {
 
         <div className="mt-4 text-center">
           <Link className={buttonVariants({ variant: "link" })} to="/login">
-            Already have an account? Sign In
+            {t("signUp.haveAccount")}
           </Link>
         </div>
       </CardContent>

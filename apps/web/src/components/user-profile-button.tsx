@@ -13,9 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
+import { useT } from "@/lib/i18n";
 import { Skeleton } from "./ui/skeleton";
 
 export function UserProfileButton() {
+  const t = useT();
   const { data, isLoading } = useQuery(getSessionOptions);
 
   // here we explicitly check for undefined and null
@@ -29,7 +31,7 @@ export function UserProfileButton() {
   if (!isLoading && data === null) {
     return (
       <Link className={buttonVariants({ variant: "outline" })} to="/login">
-        Sign In
+        {t("nav.signIn")}
       </Link>
     );
   }
@@ -39,7 +41,7 @@ export function UserProfileButton() {
   return (
     <div className="flex items-center gap-6">
       <Link className={buttonVariants({ variant: "outline" })} to="/new">
-        <PlusIcon /> New
+        <PlusIcon /> {t("nav.new")}
       </Link>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -69,15 +71,15 @@ export function UserProfileButton() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/dashboard">{t("nav.dashboard")}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link params={{ owner: user?.username ?? "" }} to="/$owner">
-              Profile
+              {t("nav.profile")}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/settings">Settings</Link>
+            <Link to="/settings">{t("nav.settings")}</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
@@ -86,7 +88,7 @@ export function UserProfileButton() {
               window.location.href = "/";
             }}
           >
-            Sign out
+            {t("nav.signOut")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

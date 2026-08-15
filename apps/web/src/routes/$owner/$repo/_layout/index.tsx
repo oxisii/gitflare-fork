@@ -29,6 +29,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useT } from "@/lib/i18n";
 
 const searchSchema = z.object({
   ref: z.string().optional(),
@@ -74,6 +75,7 @@ function IndexPendingComponent() {
 }
 
 function RouteComponent() {
+  const _t = useT();
   const params = Route.useParams();
   const search = Route.useSearch();
   const { owner, repo } = params;
@@ -208,12 +210,13 @@ function RouteComponent() {
 }
 
 function CloneButton({ repoUrl }: { repoUrl: string }) {
+  const t = useT();
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(repoUrl);
     setCopied(true);
-    toast.success("Repository URL copied to clipboard");
+    toast.success(t("repo.copied"));
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -229,13 +232,13 @@ function CloneButton({ repoUrl }: { repoUrl: string }) {
       <PopoverContent align="end" className="w-100">
         <div className="space-y-3">
           <div>
-            <h4 className="font-semibold text-sm">Clone this repository</h4>
+            <h4 className="font-semibold text-sm">{t("repo.cloneRepo")}</h4>
             <p className="mt-1 text-muted-foreground text-xs">
-              Use Git to clone this repository to your local machine.
+              {t("repo.cloneDesc")}
             </p>
           </div>
           <div className="space-y-2">
-            <div className="font-medium text-xs">HTTPS</div>
+            <div className="font-medium text-xs">{t("repo.https")}</div>
             <div className="flex items-center gap-2">
               <div className="flex-1 overflow-x-auto rounded-md border bg-muted px-3 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <code className="whitespace-nowrap text-xs">{repoUrl}</code>
@@ -320,6 +323,7 @@ function EmptyRepositoryInstructions({
   repo: string;
   isPrivate: boolean;
 }) {
+  const t = useT();
   const data = Route.useLoaderData();
   const url = new URL(data.url);
 
@@ -329,9 +333,9 @@ function EmptyRepositoryInstructions({
     <div>
       <div className="mx-auto space-y-6">
         <div className="text-center">
-          <h2 className="font-bold text-xl">This repository is empty.</h2>
+          <h2 className="font-bold text-xl">{t("repo.emptyRepo")}</h2>
           <p className="mt-2 text-muted-foreground">
-            Get started by pushing an existing repository or creating a new one.
+            {t("repo.emptyRepoDesc")}
           </p>
         </div>
 
@@ -340,15 +344,9 @@ function EmptyRepositoryInstructions({
             <CardTitle className="mb-3">Note</CardTitle>
             <div className="leading-relaxed">
               {isPrivate ? (
-                <p>
-                  This is a <strong>private repository</strong>. You'll need a
-                  Personal Access Token (PAT) to clone and push changes.
-                </p>
+                <p>{t("repo.privateRepoDesc")}</p>
               ) : (
-                <p>
-                  To push changes to this repository, you'll need a Personal
-                  Access Token (PAT).
-                </p>
+                <p>{t("repo.publicRepoDesc")}</p>
               )}{" "}
               <p>
                 Create one in{" "}
@@ -356,7 +354,7 @@ function EmptyRepositoryInstructions({
                   className="font-medium underline underline-offset-4"
                   to="/settings"
                 >
-                  Settings &gt; Personal Access Tokens
+                  {t("repo.createInSettings")}
                 </Link>
               </p>
             </div>
@@ -367,7 +365,7 @@ function EmptyRepositoryInstructions({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TerminalIcon className="size-5" />
-              Create a new repository on the command line
+              {t("repo.createNewRepo")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -389,7 +387,7 @@ git push -u origin main`}
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TerminalIcon className="size-4" />
-              Push an existing repository from the command line
+              {t("repo.pushExisting")}
             </CardTitle>
           </CardHeader>
           <CardContent>

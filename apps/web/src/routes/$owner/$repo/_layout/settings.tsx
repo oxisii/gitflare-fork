@@ -27,6 +27,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/$owner/$repo/_layout/settings")({
   component: RouteComponent,
@@ -39,6 +40,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 function RouteComponent() {
   const { owner, repo } = Route.useParams();
+  const t = useT();
 
   const { data: repository } = useSuspenseQuery(
     getRepoByOwnerAndNameOpts({
@@ -68,7 +70,7 @@ function RouteComponent() {
         },
       }),
     onSuccess: () => {
-      toast.success("Repository settings updated successfully!");
+      toast.success(t("repoSettings.success"));
     },
     onError: (err) => {
       console.error("Error updating repository:", err);
@@ -92,10 +94,10 @@ function RouteComponent() {
       <div className="space-y-6">
         <div>
           <h1 className="font-bold text-2xl tracking-tight">
-            Repository Settings
+            {t("repoSettings.title")}
           </h1>
           <p className="mt-1 text-muted-foreground">
-            Manage your repository settings and visibility
+            {t("repoSettings.pageDescription")}
           </p>
         </div>
 
@@ -107,17 +109,17 @@ function RouteComponent() {
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
               {updateRepoMutation.error.message ??
-                "Failed to update repository"}
+                t("repoSettings.failedUpdate")}
             </AlertDescription>
           </Alert>
         )}
 
         <div className="space-y-6">
           <div className="space-y-2">
-            <Label>Repository name</Label>
+            <Label>{t("repoSettings.repoName")}</Label>
             <Input disabled value={repository.name} />
             <p className="text-muted-foreground text-sm">
-              Repository name cannot be changed
+              {t("repoSettings.nameFixed")}
             </p>
           </div>
 
@@ -130,12 +132,12 @@ function RouteComponent() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>{t("repoSettings.description")}</FormLabel>
                     <FormControl>
                       <Textarea
                         className="resize-none"
                         disabled={isSubmitting}
-                        placeholder="Add a description for your repository"
+                        placeholder={t("repoSettings.descriptionPlaceholder")}
                         rows={3}
                         {...field}
                       />
@@ -150,7 +152,7 @@ function RouteComponent() {
                 name="isPrivate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Repository visibility</FormLabel>
+                    <FormLabel>{t("repoSettings.visibility")}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         className="w-full gap-2 md:flex"
@@ -163,18 +165,22 @@ function RouteComponent() {
                         <Label className="flex flex-1 items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
                           <RadioGroupItem value="public" />
                           <div className="flex flex-col gap-1">
-                            <p className="text-sm leading-4">Public</p>
+                            <p className="text-sm leading-4">
+                              {t("repoSettings.public")}
+                            </p>
                             <p className="text-muted-foreground text-xs">
-                              Anyone can see this repository
+                              {t("repoSettings.publicDesc")}
                             </p>
                           </div>
                         </Label>
                         <Label className="flex flex-1 items-start gap-2 rounded-lg border p-3 hover:bg-accent/50 has-data-checked:border-primary/48 has-data-checked:bg-accent/50">
                           <RadioGroupItem value="private" />
                           <div className="flex flex-col gap-1">
-                            <p className="text-sm leading-4">Private</p>
+                            <p className="text-sm leading-4">
+                              {t("repoSettings.private")}
+                            </p>
                             <p className="text-muted-foreground text-xs">
-                              Only you can see this repository
+                              {t("repoSettings.privateDesc")}
                             </p>
                           </div>
                         </Label>
@@ -191,7 +197,7 @@ function RouteComponent() {
                   loading={isSubmitting}
                   type="submit"
                 >
-                  Save changes
+                  {t("repoSettings.saveChanges")}
                 </Button>
               </div>
             </form>

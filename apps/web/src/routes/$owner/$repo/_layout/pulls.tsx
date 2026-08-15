@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { NotFoundComponent } from "@/components/404-components";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/$owner/$repo/_layout/pulls")({
   component: RouteComponent,
@@ -7,9 +8,6 @@ export const Route = createFileRoute("/$owner/$repo/_layout/pulls")({
 });
 
 function RouteComponent() {
-  return (
-    <div className="text-center text-xl">
-      TODO - Maybe I can't even implement this on time.
-    </div>
-  );
+  const t = useT();
+  return <div className="text-center text-xl">{t("pulls.todo")}</div>;
 }

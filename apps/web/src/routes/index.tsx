@@ -4,6 +4,7 @@ import { NotFoundComponent } from "@/components/404-components";
 import { GitHubIcon } from "@/components/github";
 import { buttonVariants } from "@/components/ui/button";
 import { UserProfileButton } from "@/components/user-profile-button";
+import { LanguageToggle, useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -11,6 +12,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeComponent() {
+  const t = useT();
   return (
     <main className="mx-auto mb-30 max-w-11/12 border border-x md:max-w-6xl">
       <div className="sticky top-0 border-b bg-background">
@@ -18,9 +20,12 @@ function HomeComponent() {
           <div className="flex items-center justify-between">
             <Link className="flex items-center gap-3" to="/">
               <GitBranchIcon className="size-5" />
-              <span className="font-semibold text-lg">Gitflare</span>
+              <span className="font-semibold text-lg">{t("app.name")}</span>
             </Link>
-            <UserProfileButton />
+            <div className="flex items-center gap-3">
+              <LanguageToggle />
+              <UserProfileButton />
+            </div>
           </div>
         </nav>
       </div>
@@ -28,16 +33,15 @@ function HomeComponent() {
         <section className="mx-auto max-w-5xl space-y-6 px-4 py-20 sm:py-30">
           <div className="space-y-4">
             <h1 className="font-semibold text-2xl sm:text-4xl">
-              Git Hosting Reimagined
+              {t("home.tagline")}
             </h1>
             <p className="max-w-2/3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-              Gitflare is a fully open-source serverless git hosting platform.
-              No VMs, No Containers, Just Durable Objects.
+              {t("home.description")}
             </p>
           </div>
           <div className="flex gap-3">
             <Link className={buttonVariants()} to="/dashboard">
-              Get Started
+              {t("home.getStarted")}
               <ArrowRightIcon />
             </Link>
             <a
@@ -63,35 +67,26 @@ function HomeComponent() {
       </div>
       <div className="border-b">
         <section className="mx-auto my-10 max-w-5xl space-y-6 px-4 sm:my-20">
-          <p className="text-xl">What is Gitflare ?</p>
+          <p className="text-xl">{t("home.featuresTitle")}</p>
           <h3 className="text-pretty text-lg text-muted-foreground">
-            Gitflare is a fully open-source serverless git hosting platform.
-            Built on top of Cloudflare Workers, Durable Objects.
+            {t("home.description")}
           </h3>
           <div className="space-y-2 leading-relaxed">
             <FeatureRow
-              description="No VMs, No Containers, Just Durable Objects"
-              feature="Serverless Architecture"
+              description={t("home.featureServerlessDesc")}
+              feature={t("home.featureServerless")}
             />
             <FeatureRow
-              description="Create unlimited public and private repositories."
-              feature="Unlimited Repositories"
+              description={t("home.featureDurableDesc")}
+              feature={t("home.featureDurable")}
             />
             <FeatureRow
-              description="Track bugs, features, and manage code reviews. Pull requests coming soon!"
-              feature="Issues & Pull Requests(soon)"
+              description={t("home.featureOpenSourceDesc")}
+              feature={t("home.featureOpenSource")}
             />
             <FeatureRow
-              description="Powered by Cloudflare's global network for low latency and high availability."
-              feature="On Edge"
-            />
-            <FeatureRow
-              description="Easily manage your repositories with a user-friendly web interface."
-              feature="Web Interface"
-            />
-            <FeatureRow
-              description="Completely open-source under the MIT License."
-              feature="Open Source"
+              description={t("home.featureFastDesc")}
+              feature={t("home.featureFast")}
             />
           </div>
         </section>
@@ -144,7 +139,7 @@ function HomeComponent() {
           className="flex h-30 w-full grow items-center justify-center gap-3 text-lg underline-offset-8 hover:bg-accent hover:underline"
           to="/dashboard"
         >
-          Get Started <ArrowRightIcon className="size-5" />
+          {t("home.getStarted")} <ArrowRightIcon className="size-5" />
         </Link>
       </section>
     </main>

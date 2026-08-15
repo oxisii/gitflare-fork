@@ -1,0 +1,39 @@
+{
+  "name": "gitflare-web-prod",
+  "main": "dist/server/index.js",
+  "compatibility_date": "2025-12-10",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "nodejs_compat_populate_process_env"
+  ],
+  "assets": {
+    "directory": "dist/client",
+    "binding": "ASSETS",
+    "not_found_handling": "none",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": false
+  },
+  "vars": {
+    "LOG_LEVEL": "warn",
+    "SITE_URL": "https://gitflare-web-prod.owarp.workers.dev",
+    "VITE_BETTER_AUTH_URL": "https://gitflare-web-prod.owarp.workers.dev",
+    "BETTER_AUTH_SECRET": "9ecb59bf7e9ae8494976799ac6201fcf61b3f872725ab85deeac1250224b9532"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "REPO",
+        "class_name": "Repo"
+      }
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_id": "3acb6a62-3122-45de-b04e-dfaa066dbdd0",
+      "database_name": "gitflare-db",
+      "migrations_dir": "./migrations",
+      "preview_database_id": "3acb6a62-3122-45de-b04e-dfaa066dbdd0"
+    }
+  ]
+}

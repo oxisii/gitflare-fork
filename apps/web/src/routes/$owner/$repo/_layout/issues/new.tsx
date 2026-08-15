@@ -20,27 +20,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/$owner/$repo/_layout/issues/new")({
   component: RouteComponent,
   notFoundComponent: NotFoundComponent,
 });
 
-const formSchema = z.object({
-  title: z
-    .string()
-    .min(1, { message: "Title is required" })
-    .max(200, { message: "Title must be less than 200 characters" }),
-  body: z.string().max(10_000, {
-    message: "Description must be less than 10,000 characters",
-  }),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
 function RouteComponent() {
+  const t = useT();
   const navigate = useNavigate();
   const params = Route.useParams();
+
+  const formSchema = z.object({
+    title: z
+      .string()
+      .min(1, { message: t("issue.titleRequired") })
+      .max(200, { message: t("issue.titleTooLong") }),
+    body: z.string().max(10_000, {
+      message: t("issue.descTooLong"),
+    }),
+  });
+
+  type FormValues = z.infer<typeof formSchema>;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -61,7 +63,7 @@ function RouteComponent() {
         },
       }),
     onSuccess: () => {
-      toast.success("Issue created successfully!");
+      toast.success(t("issue.success"));
       form.reset();
       navigate({
         to: "/$owner/$repo/issues",
@@ -90,15 +92,15 @@ function RouteComponent() {
     <div className="container mx-auto my-10 px-5 md:px-0">
       <Card className="mx-auto max-w-3xl bg-background">
         <CardHeader>
-          <CardTitle>Create a new issue</CardTitle>
+          <CardTitle>{t("issue.createTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
           {createIssueMutation.error && (
             <Alert className="mb-6" variant="destructive">
               <AlertCircleIcon className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t("issue.error")}</AlertTitle>
               <AlertDescription>
-                {createIssueMutation.error.message ?? "Failed to create issue"}
+                {createIssueMutation.error.message ?? t("issue.failedCreate")}
               </AlertDescription>
             </Alert>
           )}
@@ -110,10 +112,10 @@ function RouteComponent() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Add a title</FormLabel>
+                    <FormLabel>{t("issue.title")}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Title"
+                        placeholder={t("issue.titlePlaceholder")}
                         {...field}
                         disabled={isSubmitting}
                       />
@@ -128,11 +130,11 @@ function RouteComponent() {
                 name="body"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Add a description (optional)</FormLabel>
+                    <FormLabel>{t("issue.description")}</FormLabel>
                     <FormControl>
                       <Textarea
                         className="min-h-[200px] resize-y"
-                        placeholder="Type your description here..."
+                        placeholder={t("issue.descriptionPlaceholder")}
                         {...field}
                         disabled={isSubmitting}
                       />
@@ -148,10 +150,10 @@ function RouteComponent() {
                   params={params}
                   to="/$owner/$repo/issues"
                 >
-                  Cancel
+                  {t("issue.cancel")}
                 </Link>
                 <Button loading={isSubmitting} type="submit">
-                  Create
+                  {t("issue.create")}
                 </Button>
               </div>
             </form>

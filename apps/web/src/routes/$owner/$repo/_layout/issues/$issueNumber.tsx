@@ -13,6 +13,7 @@ import { NotFoundComponent } from "@/components/404-components";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute(
@@ -41,6 +42,7 @@ function RouteComponent() {
     })
   );
   const [commentBody, setCommentBody] = useState("");
+  const t = useT();
 
   const addCommentMutation = useMutation({
     mutationFn: async (body: string) =>
@@ -94,7 +96,8 @@ function RouteComponent() {
 
   const isSubmitting = addCommentMutation.isPending;
 
-  const statusLabel = issue.status === "open" ? "Open" : "Closed";
+  const statusLabel =
+    issue.status === "open" ? t("issue.open") : t("issue.closed");
 
   const issueIconMap = {
     open: CircleDotIcon,
@@ -133,7 +136,7 @@ function RouteComponent() {
 
         {/* Comments Section */}
         <h3 className="font-semibold text-sm">
-          Comments ({issue.comments.length})
+          {t("issue.comments", { count: issue.comments.length })}
         </h3>
         {issue.comments.length > 0 ? (
           <div className="space-y-4">
@@ -150,7 +153,7 @@ function RouteComponent() {
         ) : (
           <div className="flex items-center justify-center rounded-lg border border-dashed py-8">
             <p className="text-muted-foreground text-sm">
-              No comments yet. Be the first to comment!
+              {t("issue.noComments")}
             </p>
           </div>
         )}
@@ -161,7 +164,7 @@ function RouteComponent() {
             className="resize-none"
             disabled={isSubmitting}
             onChange={(e) => setCommentBody(e.target.value)}
-            placeholder="Add a comment..."
+            placeholder={t("issue.addComment")}
             rows={4}
             value={commentBody}
           />
@@ -179,7 +182,7 @@ function RouteComponent() {
                     "text-green-500": issue.status === "closed",
                   })}
                 />
-                {issue.status === "open" ? "Close issue" : "Reopen issue"}
+                {issue.status === "open" ? t("issue.close") : t("issue.reopen")}
               </Button>
             )}
             <div className="flex gap-2">
@@ -188,14 +191,14 @@ function RouteComponent() {
                 onClick={handleCancel}
                 variant="outline"
               >
-                Cancel
+                {t("issue.cancel")}
               </Button>
               <Button
                 loading={isSubmitting}
                 onClick={handleSubmitComment}
                 type="button"
               >
-                Comment
+                {t("issue.comment")}
               </Button>
             </div>
           </div>
@@ -218,12 +221,13 @@ export function Comment({
   creatorUsername,
   _creationTime,
 }: CommentProp) {
+  const t = useT();
   return (
     <div className="overflow-hidden rounded-lg border bg-card">
       <div className="flex items-center gap-2 border-b px-3 py-2">
         <p className="font-semibold text-sm">{creatorUsername}</p>
         <p className="text-muted-foreground text-xs">
-          {type === "description" ? "created" : "commented"}{" "}
+          {type === "description" ? t("issue.created") : t("issue.commented")}{" "}
           {formatDistanceToNow(new Date(_creationTime), {
             addSuffix: true,
           })}
@@ -231,7 +235,7 @@ export function Comment({
       </div>
 
       <div className="prose prose-sm dark:prose-invert bg-background px-3 py-2">
-        {content ?? "No content provided"}
+        {content ?? t("issue.noContent")}
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import { NotFoundComponent } from "@/components/404-components";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { diffOptionsWithHeader, diffsStyleVariables } from "@/lib/diffs-config";
+import { useT } from "@/lib/i18n";
 
 const LazyMultiFileDiff = lazy(() =>
   import("@pierre/diffs/react").then((m) => ({ default: m.MultiFileDiff }))
@@ -51,6 +52,7 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function RouteComponent() {
+  const t = useT();
   const params = Route.useParams();
   const { owner, repo, commitId } = params;
 
@@ -70,9 +72,9 @@ function RouteComponent() {
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
           <GitCommitIcon className="mx-auto mb-4 size-12 text-muted-foreground" />
-          <h3 className="mb-2 font-semibold text-lg">Commit not found</h3>
+          <h3 className="mb-2 font-semibold text-lg">{t("commit.notFound")}</h3>
           <p className="text-muted-foreground text-sm">
-            The requested commit could not be found.
+            {t("commit.notFoundDesc")}
           </p>
         </div>
       </div>
@@ -122,7 +124,7 @@ function RouteComponent() {
                 )}
               </div>
               <div className="text-muted-foreground text-xs">
-                authored{" "}
+                {t("commit.authored")}{" "}
                 {format(
                   new Date(commit.author.timestamp * 1000),
                   "MMM d, yyyy 'at' h:mm a"
@@ -132,7 +134,9 @@ function RouteComponent() {
             <div className="flex gap-5 text-xs">
               {commit.parent && commit.parent.length > 0 && (
                 <div className="flex items-center gap-2">
-                  <span className="text-muted-foreground">Parent</span>
+                  <span className="text-muted-foreground">
+                    {t("commit.parent")}
+                  </span>
                   <Link
                     className="rounded bg-muted px-2 py-0.5 font-mono transition-colors hover:bg-muted/80"
                     params={{ owner, repo, commitId: commit.parent[0] }}
@@ -143,7 +147,9 @@ function RouteComponent() {
                 </div>
               )}
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground">Commit</span>
+                <span className="text-muted-foreground">
+                  {t("commit.commit")}
+                </span>
                 <code className="rounded bg-muted px-2 py-0.5 font-mono">
                   {shortHash}
                 </code>
@@ -168,25 +174,22 @@ function RouteComponent() {
       <div className="flex items-center gap-3 font-mono text-sm">
         <span className="font-semibold">
           {totalFilesChanged === 1
-            ? "1 file changed"
-            : `${totalFilesChanged} files changed`}
+            ? `1 ${t("commit.file")} ${t("commit.changed")}`
+            : `${totalFilesChanged} ${t("commit.files")} ${t("commit.changed")}`}
         </span>
         {stats.filesAdded > 0 && (
           <span className="text-green-500">
-            +{stats.filesAdded} {stats.filesAdded === 1 ? "file" : "files"}{" "}
-            added
+            +{stats.filesAdded} {t("commit.added")}
           </span>
         )}
         {stats.filesModified > 0 && (
           <span className="text-yellow-500">
-            ~{stats.filesModified}{" "}
-            {stats.filesModified === 1 ? "file" : "files"} modified
+            ~{stats.filesModified} {t("commit.modified")}
           </span>
         )}
         {stats.filesDeleted > 0 && (
           <span className="text-red-500">
-            -{stats.filesDeleted} {stats.filesDeleted === 1 ? "file" : "files"}{" "}
-            deleted
+            -{stats.filesDeleted} {t("commit.deleted")}
           </span>
         )}
       </div>
@@ -197,9 +200,11 @@ function RouteComponent() {
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12 text-center">
               <FileIcon className="mb-4 size-12 text-muted-foreground" />
-              <h3 className="mb-2 font-semibold text-lg">No changes</h3>
+              <h3 className="mb-2 font-semibold text-lg">
+                {t("commit.noChanges")}
+              </h3>
               <p className="text-muted-foreground text-sm">
-                This commit doesn&apos;t contain any file changes.
+                {t("commit.noChangesDesc")}
               </p>
             </CardContent>
           </Card>
@@ -220,9 +225,11 @@ function RouteComponent() {
                 </div>
                 <div className="flex flex-col items-center justify-center bg-muted/30 px-4 py-12 text-center">
                   <FileIcon className="mb-3 size-10 text-muted-foreground" />
-                  <p className="font-medium text-sm">Binary file</p>
+                  <p className="font-medium text-sm">
+                    {t("commit.binaryFile")}
+                  </p>
                   <p className="text-muted-foreground text-xs">
-                    Binary files cannot be displayed
+                    {t("commit.binaryFileDesc")}
                   </p>
                 </div>
               </div>
@@ -238,7 +245,7 @@ function RouteComponent() {
               <Suspense
                 fallback={
                   <div className="p-4 text-muted-foreground text-sm">
-                    Loading diff...
+                    {t("commit.loadingDiff")}
                   </div>
                 }
               >

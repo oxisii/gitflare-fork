@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_layout/$owner")({
   component: RouteComponent,
@@ -26,6 +27,7 @@ function RouteComponent() {
   const { data: repositories } = useSuspenseQuery(
     getReposByOwnerOpts({ owner })
   );
+  const t = useT();
 
   return (
     <div className="py-8">
@@ -49,10 +51,12 @@ function RouteComponent() {
           </div>
         </div>
         <div className="col-span-3">
-          <h2 className="mb-4 font-semibold text-xl">Repositories</h2>
+          <h2 className="mb-4 font-semibold text-xl">
+            {t("profile.repositories")}
+          </h2>
           <div className="grid gap-4 md:grid-cols-2">
             {repositories.length === 0 ? (
-              <p className="text-muted-foreground">No repositories found</p>
+              <p className="text-muted-foreground">{t("profile.noRepos")}</p>
             ) : (
               repositories.map((repo) => (
                 <Link

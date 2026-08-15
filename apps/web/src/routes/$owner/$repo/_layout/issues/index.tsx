@@ -5,6 +5,7 @@ import { getIssuesByRepoOptions } from "@/api/issues";
 import { NotFoundComponent } from "@/components/404-components";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/$owner/$repo/_layout/issues/")({
   component: RouteComponent,
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/$owner/$repo/_layout/issues/")({
 });
 
 function RouteComponent() {
+  const t = useT();
   const params = Route.useParams();
   const { data: issues } = useSuspenseQuery(
     getIssuesByRepoOptions({
@@ -32,27 +34,25 @@ function RouteComponent() {
   return (
     <div className="mx-auto max-w-5xl space-y-4">
       <div className="flex items-center justify-between pb-4">
-        <h2 className="font-semibold text-xl">Issues</h2>
+        <h2 className="font-semibold text-xl">{t("issues.title")}</h2>
         <Link
           className={buttonVariants({ size: "sm" })}
           params={params}
           to="/$owner/$repo/issues/new"
         >
-          New Issue
+          {t("issues.newIssue")}
         </Link>
       </div>
 
       {issues.length === 0 && (
         <div className="space-y-4 rounded-lg border bg-card p-12 text-center">
-          <p className="text-muted-foreground">
-            No issues found for this repository.
-          </p>
+          <p className="text-muted-foreground">{t("issues.noIssues")}</p>
           <Link
             className={buttonVariants()}
             params={params}
             to="/$owner/$repo/issues/new"
           >
-            Create Issue
+            {t("issues.createIssue")}
           </Link>
         </div>
       )}
@@ -76,7 +76,7 @@ function RouteComponent() {
                   <span>#{issue.number}</span>
                   <span>•</span>
                   <span>
-                    {issue.creatorUsername} opened{" "}
+                    {issue.creatorUsername} {t("issues.opened")}{" "}
                     {formatDistanceToNow(new Date(issue.createdAt), {
                       addSuffix: true,
                     })}

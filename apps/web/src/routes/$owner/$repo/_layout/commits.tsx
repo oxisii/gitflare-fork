@@ -9,6 +9,7 @@ import { NotFoundComponent } from "@/components/404-components";
 import { BranchSelector } from "@/components/branch-selector";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
@@ -130,6 +131,7 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function RouteComponent() {
+  const t = useT();
   const params = Route.useParams();
   const { owner, repo } = params;
   const { ref } = Route.useSearch();
@@ -163,7 +165,7 @@ function RouteComponent() {
     <div className="py-6">
       {/* Branch Selector */}
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-semibold text-2xl">Commits</h1>
+        <h1 className="font-semibold text-2xl">{t("commits.title")}</h1>
         <BranchSelector
           onBranchChange={(newBranch) => {
             navigate({
@@ -183,7 +185,7 @@ function RouteComponent() {
             {/* Date Header */}
             <div className="mb-3 flex items-center gap-2">
               <h2 className="font-semibold text-foreground text-sm">
-                Commits on {date}
+                {t("commits.commitsOn", { date })}
               </h2>
             </div>
 
@@ -230,7 +232,7 @@ function RouteComponent() {
                           <span className="font-medium">
                             {commit.commit.author.name}
                           </span>
-                          <span>committed</span>
+                          <span>{t("commits.committed")}</span>
                           <span>
                             {formatRelativeTime(commit.commit.author.timestamp)}
                           </span>
@@ -253,9 +255,11 @@ function RouteComponent() {
         {data.length === 0 && (
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-12 text-center">
             <GitCommitIcon className="mb-4 size-12 text-muted-foreground" />
-            <h3 className="mb-2 font-semibold text-lg">No commits yet</h3>
+            <h3 className="mb-2 font-semibold text-lg">
+              {t("commits.noCommits")}
+            </h3>
             <p className="text-muted-foreground text-sm">
-              This repository doesn&apos;t have any commits yet.
+              {t("commits.noCommitsDesc")}
             </p>
           </div>
         )}

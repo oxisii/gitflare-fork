@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authClient } from "@/lib/auth-client";
+import { useT } from "@/lib/i18n";
 
 export const Route = createFileRoute("/_layout/settings")({
   component: RouteComponent,
@@ -44,14 +45,17 @@ export const Route = createFileRoute("/_layout/settings")({
 });
 
 function PendingComponent() {
+  const t = useT();
   return (
     <div className="mx-auto w-full max-w-4xl p-6">
-      <h1 className="mb-6 font-bold text-3xl">Settings</h1>
+      <h1 className="mb-6 font-bold text-3xl">{t("settings.title")}</h1>
 
       <Tabs defaultValue="profile" onChange={() => {}} value="profile">
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="tokens">Personal Access Tokens</TabsTrigger>
+          <TabsTrigger value="tokens">
+            {t("settings.personalAccessTokens")}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile">
@@ -91,6 +95,7 @@ function PendingComponent() {
 }
 
 function RouteComponent() {
+  const t = useT();
   const { data: session, isLoading } = useSuspenseQuery(getSessionOptions);
 
   if (isLoading) {
@@ -101,12 +106,14 @@ function RouteComponent() {
 
   return (
     <div className="mx-auto w-full max-w-4xl p-6">
-      <h1 className="mb-6 font-bold text-3xl">Settings</h1>
+      <h1 className="mb-6 font-bold text-3xl">{t("settings.title")}</h1>
 
       <Tabs defaultValue="profile">
         <TabsList>
           <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="tokens">Personal Access Tokens</TabsTrigger>
+          <TabsTrigger value="tokens">
+            {t("settings.personalAccessTokens")}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile">
@@ -245,6 +252,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
 }
 
 function PersonalAccessTokens() {
+  const t = useT();
   const { data, isLoading } = useQuery(listPersonalAccessTokens);
   const queryClient = useQueryClient();
 
@@ -273,7 +281,7 @@ function PersonalAccessTokens() {
       });
       setNewlyCreatedToken(data.key);
       setShowNewTokenDialog(false);
-      toast.success("Personal access token created successfully");
+      toast.success(t("settings.tokenCreated"));
     },
     onError: (error) => {
       console.log(error);
@@ -319,15 +327,16 @@ function PersonalAccessTokens() {
     <div className="space-y-6">
       <div className="rounded-lg border p-6">
         <div className="mb-6">
-          <h2 className="mb-2 font-semibold text-lg">Personal Access Tokens</h2>
+          <h2 className="mb-2 font-semibold text-lg">
+            {t("settings.personalAccessTokens")}
+          </h2>
           <p className="text-muted-foreground text-sm">
-            Personal access tokens function like passwords for Git over HTTP.
-            Use them to authenticate when pushing or pulling repositories.
+            {t("settings.patDescription")}
           </p>
         </div>
 
         <Button onClick={() => setShowNewTokenDialog(true)}>
-          Generate New Token
+          {t("settings.createToken")}
         </Button>
 
         {/* Create Token Dialog */}
@@ -350,13 +359,13 @@ function PersonalAccessTokens() {
               <form.Field name="name">
                 {(field) => (
                   <div className="space-y-2 py-4">
-                    <Label htmlFor={field.name}>Token Name</Label>
+                    <Label htmlFor={field.name}>{t("settings.patName")}</Label>
                     <Input
                       id={field.name}
                       name={field.name}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="e.g., My Development Token"
+                      placeholder={t("settings.patNamePlaceholder")}
                       value={field.state.value}
                     />
                     <p className="text-muted-foreground text-xs">
@@ -460,6 +469,7 @@ function TokenCard({
   createdAt,
   lastRequest,
 }: TokenCardProps) {
+  const t = useT();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
@@ -489,8 +499,13 @@ function TokenCard({
             <h4 className="font-semibold text-sm">{name}</h4>
           </div>
           <div className="space-y-1 text-muted-foreground text-xs">
-            <p>Created: {formatDate(createdAt)}</p>
-            <p>Last used: {lastRequest ? formatDate(lastRequest) : "Never"}</p>
+            <p>
+              {t("settings.patCreated")}: {formatDate(createdAt)}
+            </p>
+            <p>
+              {t("settings.patLastUsed")}:{" "}
+              {lastRequest ? formatDate(lastRequest) : t("settings.patNever")}
+            </p>
             <code className="text-xs">{`${start}.....`}</code>
           </div>
         </div>
