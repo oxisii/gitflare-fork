@@ -81,6 +81,16 @@ const en = {
   "home.createAccount": "Create Account",
   "home.footer": "GitVex. Built with Cloudflare Workers & Durable Objects.",
   "home.logo": "GitVex",
+  "home.builtWith": "Built With",
+  "home.giveStar": "Give a Star",
+  "home.github": "GitHub",
+  "home.techWorkers":
+    "To handle Git smart HTTP protocol requests and hosting the web interface.",
+  "home.techDO": "To store and manage Git repository data.",
+  "home.techD1":
+    "To store user data, repository metadata, issues, and other metadata.",
+  "home.techAuth": "For handling authentication and authorization.",
+  "home.techTanstack": "As a framework for building the web interface.",
 
   // Dashboard
   "dashboard.title": "Dashboard",
@@ -132,6 +142,33 @@ const en = {
   "settings.confirmDelete": "Are you sure you want to delete this token?",
   "settings.tokenCreated": "Token created successfully!",
   "settings.tokenDeleted": "Token deleted successfully!",
+  "settings.profileTab": "Profile",
+  "settings.profileInfo": "Profile Information",
+  "settings.name": "Name",
+  "settings.username": "Username",
+  "settings.email": "Email",
+  "settings.usernameFixed": "Username cannot be changed",
+  "settings.emailFixed": "Email cannot be changed",
+  "settings.saveChanges": "Save Changes",
+  "settings.profileUpdated": "Profile updated successfully",
+  "settings.profileUpdateFailed": "Failed to update profile",
+  "settings.nameMin": "Name must be at least 2 characters",
+  "settings.createPatTitle": "Create Personal Access Token",
+  "settings.createPatDesc":
+    "Give your token a descriptive name to help you identify it later.",
+  "settings.patPurpose": "What is this token for?",
+  "settings.cancel": "Cancel",
+  "settings.generateToken": "Generate Token",
+  "settings.generatedToken": "Generated Token",
+  "settings.copyNow":
+    "Make sure to copy your personal access token now. You won't be able to see it again!",
+  "settings.yourTokens": "Your Tokens",
+  "settings.unnamedToken": "Unnamed Token",
+  "settings.noTokenToCopy": "No token to copy",
+  "settings.failedCreatePat": "Failed to create personal access token",
+  "settings.failedDeletePat": "Failed to delete personal access token",
+  "settings.tokenNameMin": "Token name must be at least 3 characters",
+  "settings.tokenNameMax": "Token name must be at most 50 characters",
 
   // Profile
   "profile.repositories": "Repositories",
@@ -331,6 +368,14 @@ const zh: Record<string, string> = {
   "home.createAccount": "创建账户",
   "home.footer": "GitVex。基于 Cloudflare Workers 与 Durable Objects 构建。",
   "home.logo": "GitVex",
+  "home.builtWith": "技术栈",
+  "home.giveStar": "去 GitHub 点个 Star",
+  "home.github": "GitHub",
+  "home.techWorkers": "处理 Git Smart HTTP 协议请求并托管 Web 界面。",
+  "home.techDO": "存储和管理 Git 仓库数据。",
+  "home.techD1": "存储用户数据、仓库元数据、议题和其他元数据。",
+  "home.techAuth": "处理身份认证与授权。",
+  "home.techTanstack": "用于构建 Web 界面的框架。",
 
   "dashboard.title": "控制台",
   "dashboard.welcome": "欢迎, {username}",
@@ -378,6 +423,31 @@ const zh: Record<string, string> = {
   "settings.confirmDelete": "确定要删除此令牌吗？",
   "settings.tokenCreated": "令牌创建成功！",
   "settings.tokenDeleted": "令牌已删除！",
+  "settings.profileTab": "个人资料",
+  "settings.profileInfo": "个人资料",
+  "settings.name": "姓名",
+  "settings.username": "用户名",
+  "settings.email": "邮箱",
+  "settings.usernameFixed": "用户名不可更改",
+  "settings.emailFixed": "邮箱不可更改",
+  "settings.saveChanges": "保存更改",
+  "settings.profileUpdated": "个人资料已更新",
+  "settings.profileUpdateFailed": "更新个人资料失败",
+  "settings.nameMin": "姓名至少需要2个字符",
+  "settings.createPatTitle": "创建个人访问令牌",
+  "settings.createPatDesc": "给令牌起一个便于识别的名称。",
+  "settings.patPurpose": "这个令牌用于什么？",
+  "settings.cancel": "取消",
+  "settings.generateToken": "生成令牌",
+  "settings.generatedToken": "已生成的令牌",
+  "settings.copyNow": "请立即复制个人访问令牌，之后将无法再次查看！",
+  "settings.yourTokens": "我的令牌",
+  "settings.unnamedToken": "未命名令牌",
+  "settings.noTokenToCopy": "没有可复制的令牌",
+  "settings.failedCreatePat": "创建个人访问令牌失败",
+  "settings.failedDeletePat": "删除个人访问令牌失败",
+  "settings.tokenNameMin": "令牌名称至少需要3个字符",
+  "settings.tokenNameMax": "令牌名称不能超过50个字符",
 
   "profile.repositories": "仓库",
   "profile.noRepos": "暂无仓库",
@@ -529,7 +599,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const t: I18nCtx["t"] = (key, params) => {
     const dict = dicts[locale] ?? en;
-    let val = dict[key] ?? en[key] ?? key;
+    let val = dict[key] ?? (en as Dict)[key] ?? key;
     if (params) {
       for (const [k, v] of Object.entries(params)) {
         val = val.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
@@ -563,13 +633,18 @@ export function useLocale() {
 
 export function LanguageToggle() {
   const { locale, setLocale } = useLocale();
+  const next = locale === "en" ? "zh" : "en";
   return (
     <button
-      className="text-muted-foreground text-xs transition-colors hover:text-foreground"
-      onClick={() => setLocale(locale === "en" ? "zh" : "en")}
+      aria-label={locale === "en" ? "切换到中文" : "Switch to English"}
+      className="inline-flex h-8 shrink-0 items-center justify-center rounded-md border border-border bg-background px-2 font-medium text-xs tabular-nums transition-colors hover:bg-accent hover:text-accent-foreground sm:h-9 sm:px-2.5"
+      onClick={() => setLocale(next)}
       type="button"
     >
-      {locale === "en" ? "中文" : "English"}
+      <span className="sm:hidden">{locale === "en" ? "中" : "EN"}</span>
+      <span className="hidden sm:inline">
+        {locale === "en" ? "中文" : "English"}
+      </span>
     </button>
   );
 }

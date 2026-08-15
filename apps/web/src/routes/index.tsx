@@ -17,12 +17,14 @@ function HomeComponent() {
     <main className="mx-auto mb-30 max-w-11/12 border border-x md:max-w-6xl">
       <div className="sticky top-0 border-b bg-background">
         <nav className="mx-auto max-w-5xl p-4">
-          <div className="flex items-center justify-between">
-            <Link className="flex items-center gap-3" to="/">
-              <GitBranchIcon className="size-5" />
-              <span className="font-semibold text-lg">{t("app.name")}</span>
+          <div className="flex items-center justify-between gap-2">
+            <Link className="flex min-w-0 items-center gap-2 sm:gap-3" to="/">
+              <GitBranchIcon className="size-5 shrink-0" />
+              <span className="truncate font-semibold text-base sm:text-lg">
+                {t("app.name")}
+              </span>
             </Link>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <LanguageToggle />
               <UserProfileButton />
             </div>
@@ -51,7 +53,7 @@ function HomeComponent() {
               target="_blank"
             >
               <GitHubIcon />
-              GitHub
+              {t("home.github")}
             </a>
           </div>
           <div className="my-14">
@@ -94,31 +96,31 @@ function HomeComponent() {
 
       <div className="border-b">
         <section className="mx-auto my-10 max-w-5xl space-y-6 px-4 sm:my-20">
-          <p className="text-xl">Built With</p>
+          <p className="text-xl">{t("home.builtWith")}</p>
 
           <div className="space-y-2 leading-relaxed">
             <TechRow
-              description="To handle Git smart HTTP protocol requests and hosting the web interface."
+              description={t("home.techWorkers")}
               href="https://developers.cloudflare.com/workers/"
               title="Cloudflare Workers"
             />
             <TechRow
-              description="To store and manage Git repository data."
+              description={t("home.techDO")}
               href="https://developers.cloudflare.com/durable-objects/"
               title="Cloudflare Durable Objects"
             />
             <TechRow
-              description="To store user data, repository metadata, issues, and other metadata."
+              description={t("home.techD1")}
               href="https://developers.cloudflare.com/d1/"
               title="Cloudflare D1"
             />
             <TechRow
-              description="For handeling authentication and authorization."
+              description={t("home.techAuth")}
               href="https://www.better-auth.com/"
               title="Better Auth"
             />
             <TechRow
-              description="As a framework for building the web interface."
+              description={t("home.techTanstack")}
               href="https://tanstack.com/start/latest"
               title="Tanstack Start"
             />
@@ -133,7 +135,7 @@ function HomeComponent() {
           rel="noopener noreferrer"
           target="_blank"
         >
-          Give a Star <GitHubIcon className="size-5" />
+          {t("home.giveStar")} <GitHubIcon className="size-5" />
         </a>
         <Link
           className="flex h-30 w-full grow items-center justify-center gap-3 text-lg underline-offset-8 hover:bg-accent hover:underline"

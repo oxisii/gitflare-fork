@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
 import { useT } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 import { Skeleton } from "./ui/skeleton";
 
 export function UserProfileButton() {
@@ -39,8 +40,24 @@ export function UserProfileButton() {
   const user = data?.user;
 
   return (
-    <div className="flex items-center gap-6">
-      <Link className={buttonVariants({ variant: "outline" })} to="/new">
+    <div className="flex items-center gap-2 sm:gap-4">
+      <Link
+        className={cn(
+          buttonVariants({ variant: "outline", size: "icon" }),
+          "sm:hidden"
+        )}
+        to="/new"
+      >
+        <PlusIcon />
+        <span className="sr-only">{t("nav.new")}</span>
+      </Link>
+      <Link
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "hidden sm:inline-flex"
+        )}
+        to="/new"
+      >
         <PlusIcon /> {t("nav.new")}
       </Link>
       <DropdownMenu>

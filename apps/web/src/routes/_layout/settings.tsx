@@ -52,7 +52,7 @@ function PendingComponent() {
 
       <Tabs defaultValue="profile" onChange={() => {}} value="profile">
         <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="profile">{t("settings.profileTab")}</TabsTrigger>
           <TabsTrigger value="tokens">
             {t("settings.personalAccessTokens")}
           </TabsTrigger>
@@ -110,7 +110,7 @@ function RouteComponent() {
 
       <Tabs defaultValue="profile">
         <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="profile">{t("settings.profileTab")}</TabsTrigger>
           <TabsTrigger value="tokens">
             {t("settings.personalAccessTokens")}
           </TabsTrigger>
@@ -139,6 +139,7 @@ type ProfileSettingsProps = {
 };
 
 function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
+  const t = useT();
   const queryClient = useQueryClient();
 
   const updateProfileMutation = useMutation({
@@ -147,7 +148,9 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
         name: data.name,
       });
       if (result.error) {
-        throw new Error(result.error.message || "Failed to update profile");
+        throw new Error(
+          result.error.message || t("settings.profileUpdateFailed")
+        );
       }
       await queryClient.refetchQueries({
         queryKey: getSessionOptions.queryKey,
@@ -155,10 +158,10 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
       return result.data;
     },
     onSuccess: async () => {
-      toast.success("Profile updated successfully");
+      toast.success(t("settings.profileUpdated"));
     },
     onError: (error: Error) => {
-      toast.error(error.message || "Failed to update profile");
+      toast.error(error.message || t("settings.profileUpdateFailed"));
     },
   });
 
@@ -171,14 +174,16 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
     },
     validators: {
       onSubmit: z.object({
-        name: z.string().min(2, "Name must be at least 2 characters"),
+        name: z.string().min(2, t("settings.nameMin")),
       }),
     },
   });
 
   return (
     <div className="rounded-lg border p-6">
-      <h2 className="mb-6 font-semibold text-lg">Profile Information</h2>
+      <h2 className="mb-6 font-semibold text-lg">
+        {t("settings.profileInfo")}
+      </h2>
 
       <div className="mb-6 flex items-center gap-4">
         <Avatar className="h-20 w-20">
@@ -211,7 +216,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
           <form.Field name="name">
             {(field) => (
               <div className="space-y-2">
-                <Label htmlFor={field.name}>Name</Label>
+                <Label htmlFor={field.name}>{t("settings.name")}</Label>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -230,21 +235,21 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
           </form.Field>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="username">Username</Label>
+          <Label htmlFor="username">{t("settings.username")}</Label>
           <Input disabled id="username" value={username} />
           <p className="text-muted-foreground text-xs">
-            Username cannot be changed
+            {t("settings.usernameFixed")}
           </p>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("settings.email")}</Label>
           <Input disabled id="email" type="email" value={email} />
           <p className="text-muted-foreground text-xs">
-            Email cannot be changed
+            {t("settings.emailFixed")}
           </p>
         </div>
         <Button loading={updateProfileMutation.isPending} type="submit">
-          Save Changes
+          {t("settings.saveChanges")}
         </Button>
       </form>
     </div>
@@ -269,9 +274,7 @@ function PersonalAccessTokens() {
         prefix: "gvx_",
       });
       if (error) {
-        throw new Error(
-          error.message || "Failed to create personal access token"
-        );
+        throw new Error(error.message || t("settings.failedCreatePat"));
       }
       return data;
     },
@@ -285,7 +288,7 @@ function PersonalAccessTokens() {
     },
     onError: (error) => {
       console.log(error);
-      toast.error(error.message || "Failed to create personal access token");
+      toast.error(error.message || t("settings.failedCreatePat"));
     },
   });
 
@@ -301,8 +304,8 @@ function PersonalAccessTokens() {
       onSubmit: z.object({
         name: z
           .string()
-          .min(3, "Token name must be at least 3 characters")
-          .max(50, "Token name must be at most 50 characters"),
+          .min(3, t("settings.tokenNameMin"))
+          .max(50, t("settings.tokenNameMax")),
       }),
     },
   });
@@ -315,7 +318,7 @@ function PersonalAccessTokens() {
 
   const handleCopyToken = (token: string) => {
     if (!token) {
-      toast.error("No token to copy");
+      toast.error(t("settings.noTokenToCopy"));
       return;
     }
     navigator.clipboard.writeText(token);
@@ -343,10 +346,9 @@ function PersonalAccessTokens() {
         <Dialog onOpenChange={setShowNewTokenDialog} open={showNewTokenDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create Personal Access Token</DialogTitle>
+              <DialogTitle>{t("settings.createPatTitle")}</DialogTitle>
               <DialogDescription>
-                Give your token a descriptive name to help you identify it
-                later.
+                {t("settings.createPatDesc")}
               </DialogDescription>
             </DialogHeader>
             <form
@@ -369,7 +371,7 @@ function PersonalAccessTokens() {
                       value={field.state.value}
                     />
                     <p className="text-muted-foreground text-xs">
-                      What is this token for?
+                      {t("settings.patPurpose")}
                     </p>
                     {field.state.meta.errors.map((error) => (
                       <p
@@ -391,10 +393,10 @@ function PersonalAccessTokens() {
                   type="button"
                   variant="outline"
                 >
-                  Cancel
+                  {t("settings.cancel")}
                 </Button>
                 <Button loading={createPATMutation.isPending} type="submit">
-                  Generate Token
+                  {t("settings.generateToken")}
                 </Button>
               </DialogFooter>
             </form>
@@ -403,10 +405,11 @@ function PersonalAccessTokens() {
 
         {newlyCreatedToken && (
           <div className="my-5">
-            <h2 className="font-semibold text-lg">Generated Token</h2>
+            <h2 className="font-semibold text-lg">
+              {t("settings.generatedToken")}
+            </h2>
             <p className="mb-2 text-muted-foreground text-sm">
-              Make sure to copy your personal access token now. You won't be
-              able to see it again!
+              {t("settings.copyNow")}
             </p>
             <div className="flex items-center gap-2">
               <code className="block overflow-x-auto whitespace-nowrap rounded border bg-muted p-2 font-mono text-sm">
@@ -432,7 +435,9 @@ function PersonalAccessTokens() {
 
       {tokens.length > 0 && (
         <div className="rounded-lg border p-6">
-          <h3 className="mb-4 font-semibold text-base">Your Tokens</h3>
+          <h3 className="mb-4 font-semibold text-base">
+            {t("settings.yourTokens")}
+          </h3>
           <div className="space-y-3">
             {tokens.map((token) => (
               <TokenCard
@@ -440,7 +445,7 @@ function PersonalAccessTokens() {
                 id={token.id}
                 key={token.id}
                 lastRequest={token.lastRequest}
-                name={token.name ?? "Unnamed Token"}
+                name={token.name ?? t("settings.unnamedToken")}
                 start={token.start ?? "gvx_xxx"}
               />
             ))}
@@ -478,9 +483,7 @@ function TokenCard({
         keyId: tokenId,
       });
       if (error || !data.success) {
-        throw new Error(
-          error?.message || "Failed to delete personal access token"
-        );
+        throw new Error(error?.message || t("settings.failedDeletePat"));
       }
       await queryClient.refetchQueries({
         queryKey: listPersonalAccessTokens.queryKey,
@@ -488,7 +491,7 @@ function TokenCard({
     },
     onError: (error) => {
       console.log(error);
-      toast.error(error.message || "Failed to delete personal access token");
+      toast.error(error.message || t("settings.failedDeletePat"));
     },
   });
   return (

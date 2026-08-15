@@ -14,13 +14,15 @@ function RouteComponent() {
   return (
     <>
       <div className="border-b py-3">
-        <nav className="mx-auto max-w-5xl">
-          <div className="flex items-center justify-between">
-            <Link className="flex items-center gap-3" to="/">
-              <GitBranchIcon className="size-5" />
-              <span className="font-semibold text-lg">{t("app.name")}</span>
+        <nav className="mx-auto max-w-5xl px-4">
+          <div className="flex items-center justify-between gap-2">
+            <Link className="flex min-w-0 items-center gap-2 sm:gap-3" to="/">
+              <GitBranchIcon className="size-5 shrink-0" />
+              <span className="truncate font-semibold text-base sm:text-lg">
+                {t("app.name")}
+              </span>
             </Link>
-            <div className="flex items-center gap-3">
+            <div className="flex shrink-0 items-center gap-2 sm:gap-3">
               <LanguageToggle />
               <UserProfileButton />
             </div>

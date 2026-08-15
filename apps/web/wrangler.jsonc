@@ -35,5 +35,6 @@
       "migrations_dir": "./migrations",
       "preview_database_id": "3acb6a62-3122-45de-b04e-dfaa066dbdd0"
     }
-  ]
+  ],
+  "migrations": []
 }
