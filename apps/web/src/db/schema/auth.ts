@@ -18,6 +18,7 @@ export const user = sqliteTable("user", {
     .notNull(),
   username: text("username").unique(),
   displayUsername: text("display_username"),
+  locale: text("locale").default("en").notNull(),
 });
 
 export const session = sqliteTable(

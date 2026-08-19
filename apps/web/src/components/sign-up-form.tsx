@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
 import * as m from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 import { Button, buttonVariants } from "./ui/button";
 import {
   Card,
@@ -32,6 +33,7 @@ export default function SignUpForm() {
           password: value.password,
           name: value.name,
           username: value.username,
+          locale: getLocale(),
         },
         {
           onSuccess: () => {

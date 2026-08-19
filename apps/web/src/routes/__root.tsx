@@ -15,6 +15,7 @@ import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSessionOptions } from "@/api/session";
 import { NotFoundComponent } from "@/components/404-components";
+import { LocaleSync } from "@/components/language-switcher";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import * as m from "@/paraglide/messages";
@@ -178,6 +179,7 @@ function RootDocument() {
           </div>
         )}
         <Outlet />
+        <LocaleSync />
         <Toaster richColors />
         <TanStackRouterDevtools position="bottom-left" />
         <Scripts />

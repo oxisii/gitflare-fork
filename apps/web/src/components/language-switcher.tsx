@@ -1,3 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { getSessionOptions } from "@/api/session";
 import {
   Select,
   SelectContent,
@@ -5,7 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getLocale, locales, setLocale } from "@/paraglide/runtime";
+import {
+  applySavedLocale,
+  isAppLocale,
+  persistLocale,
+} from "@/lib/locale-preference";
+import { getLocale, locales } from "@/paraglide/runtime";
 
 const LABELS: Record<(typeof locales)[number], string> = {
   en: "English",
@@ -18,8 +26,8 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   return (
     <Select
       onValueChange={(value) => {
-        if (value === "en" || value === "zh") {
-          setLocale(value);
+        if (isAppLocale(value)) {
+          void persistLocale(value);
         }
       }}
       value={current}
@@ -36,4 +44,17 @@ export function LanguageSwitcher({ className }: { className?: string }) {
       </SelectContent>
     </Select>
   );
+}
+
+export function LocaleSync() {
+  const { data } = useQuery(getSessionOptions);
+
+  useEffect(() => {
+    const saved = data?.user
+      ? (data.user as { locale?: unknown }).locale
+      : undefined;
+    applySavedLocale(saved);
+  }, [data?.user]);
+
+  return null;
 }

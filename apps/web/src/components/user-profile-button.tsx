@@ -15,9 +15,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
+import { isAppLocale, persistLocale } from "@/lib/locale-preference";
 import { cn } from "@/lib/utils";
 import * as m from "@/paraglide/messages";
-import { getLocale, setLocale } from "@/paraglide/runtime";
+import { getLocale } from "@/paraglide/runtime";
 import { Skeleton } from "./ui/skeleton";
 
 export function UserProfileButton() {
@@ -107,8 +108,8 @@ export function UserProfileButton() {
           </DropdownMenuLabel>
           <DropdownMenuRadioGroup
             onValueChange={(value) => {
-              if (value === "en" || value === "zh") {
-                setLocale(value);
+              if (isAppLocale(value)) {
+                void persistLocale(value);
               }
             }}
             value={locale}

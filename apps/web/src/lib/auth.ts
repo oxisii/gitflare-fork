@@ -15,6 +15,16 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: false,
   },
+  user: {
+    additionalFields: {
+      locale: {
+        type: "string",
+        required: false,
+        defaultValue: "en",
+        input: true,
+      },
+    },
+  },
   advanced: {
     useSecureCookies: true,
   },

@@ -36,6 +36,19 @@ if (build.status) {
   process.exit(build.status);
 }
 
+const migrate = spawnSync(
+  "npx",
+  ["wrangler", "d1", "migrations", "apply", "gitflare-db", "--remote"],
+  {
+    cwd: webRoot,
+    stdio: "inherit",
+    env: process.env,
+  }
+);
+if (migrate.status) {
+  process.exit(migrate.status);
+}
+
 const wranglerPath = join(webRoot, "dist/server/wrangler.json");
 const config = JSON.parse(readFileSync(wranglerPath, "utf8"));
 

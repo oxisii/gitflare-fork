@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
+import { applySavedLocale } from "@/lib/locale-preference";
 import * as m from "@/paraglide/messages";
 import { Button, buttonVariants } from "./ui/button";
 import {
@@ -30,7 +31,11 @@ export default function SignInForm() {
           password: value.password,
         },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
+            const { data } = await authClient.getSession();
+            applySavedLocale(
+              data?.user ? (data.user as { locale?: unknown }).locale : undefined
+            );
             navigate({
               to: "/dashboard",
             });

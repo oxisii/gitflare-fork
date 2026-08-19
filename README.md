@@ -5,6 +5,14 @@ A self-hosted GitHub alternative built to run on Cloudflare Developer Platform. 
 > [!WARNING]
 > Gitflare is currently in very early development. Expect bugs and missing features.
 
+This deployment (`oxisii/gitflare`) tracks official upstream:
+https://github.com/mdhruvil/gitflare
+
+```bash
+./scripts/sync-upstream.sh
+git merge upstream/main
+```
+
 ## Features
 
 - **Serverless Architecture** - No VMs, No Containers, Just Durable Objects
