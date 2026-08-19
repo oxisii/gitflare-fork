@@ -6,7 +6,7 @@ import {
 } from "alchemy/cloudflare";
 import { CloudflareStateStore } from "alchemy/state";
 
-const PROD_DOMAIN = "git.warp.dpdns.org";
+const PROD_DOMAIN = "git.outtw.com";
 
 const LOCAL_URL = "http://localhost:3000";
 const PROD_URL = `https://${PROD_DOMAIN}`;

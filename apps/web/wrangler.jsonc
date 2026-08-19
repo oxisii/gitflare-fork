@@ -15,9 +15,9 @@
   },
   "vars": {
     "LOG_LEVEL": "warn",
-    "SITE_URL": "https://git.warp.dpdns.org",
-    "VITE_BETTER_AUTH_URL": "https://git.warp.dpdns.org",
-    "BETTER_AUTH_SECRET": "9ecb59bf7e9ae8494976799ac6201fcf61b3f872725ab85deeac1250224b9532"
+    "SITE_URL": "https://git.outtw.com",
+    "VITE_BETTER_AUTH_URL": "https://git.outtw.com",
+    "BETTER_AUTH_SECRET": "af7889313822c135304149f9bb264d644ed97b5033026742695d5340333e7e36"
   },
   "durable_objects": {
     "bindings": [
@@ -30,11 +30,16 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_id": "3acb6a62-3122-45de-b04e-dfaa066dbdd0",
+      "database_id": "ca21121f-b43c-4aa9-88b3-68c3d6220151",
       "database_name": "gitflare-db",
       "migrations_dir": "./migrations",
-      "preview_database_id": "3acb6a62-3122-45de-b04e-dfaa066dbdd0"
+      "preview_database_id": "ca21121f-b43c-4aa9-88b3-68c3d6220151"
     }
   ],
-  "migrations": []
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["Repo"]
+    }
+  ]
 }
