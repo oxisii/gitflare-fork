@@ -1,12 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { formatDistanceToNow } from "date-fns";
 import { FileIcon, FolderIcon } from "lucide-react";
 import { z } from "zod";
 import { getTreeQueryOptions } from "@/api/tree";
 import { NotFoundComponent } from "@/components/404-components";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useT } from "@/lib/i18n";
+import { formatRelative } from "@/lib/i18n-format";
+import * as m from "@/paraglide/messages";
 
 const searchSchema = z.object({
   ref: z.string().optional(),
@@ -35,7 +35,6 @@ export const Route = createFileRoute("/$owner/$repo/_layout/_viewer/tree")({
 });
 
 function TreePendingComponent() {
-  const _t = useT();
   return (
     <div className="py-6">
       <div className="mb-6 flex items-center justify-between">
@@ -55,7 +54,6 @@ function TreePendingComponent() {
 }
 
 function RouteComponent() {
-  const t = useT();
   const params = Route.useParams();
   const search = Route.useSearch();
   const { owner, repo } = params;
@@ -132,9 +130,9 @@ function RouteComponent() {
         {sortedTree.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <FolderIcon className="mb-4 size-12 text-muted-foreground" />
-            <h3 className="mb-2 font-semibold text-lg">{t("tree.emptyDir")}</h3>
+            <h3 className="mb-2 font-semibold text-lg">{m.tree_empty_dir()}</h3>
             <p className="text-muted-foreground text-sm">
-              {t("tree.emptyDirDesc")}
+              {m.tree_empty_dir_desc()}
             </p>
           </div>
         )}
@@ -145,5 +143,5 @@ function RouteComponent() {
 
 function formatDate(timestamp: number): string {
   const date = new Date(timestamp * 1000);
-  return formatDistanceToNow(date, { addSuffix: true });
+  return formatRelative(date);
 }

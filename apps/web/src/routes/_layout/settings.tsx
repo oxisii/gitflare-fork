@@ -6,7 +6,6 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { formatDistanceToNow } from "date-fns";
 import { CheckIcon, CopyIcon, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -14,6 +13,7 @@ import z from "zod";
 import { listPersonalAccessTokens } from "@/api/pat";
 import { getSessionOptions } from "@/api/session";
 import { NotFoundComponent } from "@/components/404-components";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -30,7 +30,8 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authClient } from "@/lib/auth-client";
-import { useLocale, useT } from "@/lib/i18n";
+import { formatRelative } from "@/lib/i18n-format";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_layout/settings")({
   component: RouteComponent,
@@ -45,16 +46,15 @@ export const Route = createFileRoute("/_layout/settings")({
 });
 
 function PendingComponent() {
-  const t = useT();
   return (
     <div className="mx-auto w-full max-w-4xl p-6">
-      <h1 className="mb-6 font-bold text-3xl">{t("settings.title")}</h1>
+      <h1 className="mb-6 font-bold text-3xl">{m.settings_title()}</h1>
 
       <Tabs defaultValue="profile" onChange={() => {}} value="profile">
         <TabsList>
-          <TabsTrigger value="profile">{t("settings.profileTab")}</TabsTrigger>
+          <TabsTrigger value="profile">{m.settings_profile_tab()}</TabsTrigger>
           <TabsTrigger value="tokens">
-            {t("settings.personalAccessTokens")}
+            {m.settings_personal_access_tokens()}
           </TabsTrigger>
         </TabsList>
 
@@ -95,7 +95,6 @@ function PendingComponent() {
 }
 
 function RouteComponent() {
-  const t = useT();
   const { data: session, isLoading } = useSuspenseQuery(getSessionOptions);
 
   if (isLoading) {
@@ -106,13 +105,13 @@ function RouteComponent() {
 
   return (
     <div className="mx-auto w-full max-w-4xl p-6">
-      <h1 className="mb-6 font-bold text-3xl">{t("settings.title")}</h1>
+      <h1 className="mb-6 font-bold text-3xl">{m.settings_title()}</h1>
 
       <Tabs defaultValue="profile">
         <TabsList>
-          <TabsTrigger value="profile">{t("settings.profileTab")}</TabsTrigger>
+          <TabsTrigger value="profile">{m.settings_profile_tab()}</TabsTrigger>
           <TabsTrigger value="tokens">
-            {t("settings.personalAccessTokens")}
+            {m.settings_personal_access_tokens()}
           </TabsTrigger>
         </TabsList>
 
@@ -140,7 +139,6 @@ type ProfileSettingsProps = {
 };
 
 function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
-  const t = useT();
   const queryClient = useQueryClient();
 
   const updateProfileMutation = useMutation({
@@ -150,7 +148,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
       });
       if (result.error) {
         throw new Error(
-          result.error.message || t("settings.profileUpdateFailed")
+          result.error.message || m.settings_profile_update_failed()
         );
       }
       await queryClient.refetchQueries({
@@ -159,10 +157,10 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
       return result.data;
     },
     onSuccess: async () => {
-      toast.success(t("settings.profileUpdated"));
+      toast.success(m.settings_profile_updated());
     },
     onError: (error: Error) => {
-      toast.error(error.message || t("settings.profileUpdateFailed"));
+      toast.error(error.message || m.settings_profile_update_failed());
     },
   });
 
@@ -175,7 +173,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
     },
     validators: {
       onSubmit: z.object({
-        name: z.string().min(2, t("settings.nameMin")),
+        name: z.string().min(2, m.settings_name_min()),
       }),
     },
   });
@@ -183,7 +181,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
   return (
     <div className="rounded-lg border p-6">
       <h2 className="mb-6 font-semibold text-lg">
-        {t("settings.profileInfo")}
+        {m.settings_profile_info()}
       </h2>
 
       <div className="mb-6 flex items-center gap-4">
@@ -217,7 +215,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
           <form.Field name="name">
             {(field) => (
               <div className="space-y-2">
-                <Label htmlFor={field.name}>{t("settings.name")}</Label>
+                <Label htmlFor={field.name}>{m.settings_name()}</Label>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -236,21 +234,21 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
           </form.Field>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="username">{t("settings.username")}</Label>
+          <Label htmlFor="username">{m.settings_username()}</Label>
           <Input disabled id="username" value={username} />
           <p className="text-muted-foreground text-xs">
-            {t("settings.usernameFixed")}
+            {m.settings_username_fixed()}
           </p>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">{t("settings.email")}</Label>
+          <Label htmlFor="email">{m.settings_email()}</Label>
           <Input disabled id="email" type="email" value={email} />
           <p className="text-muted-foreground text-xs">
-            {t("settings.emailFixed")}
+            {m.settings_email_fixed()}
           </p>
         </div>
         <Button loading={updateProfileMutation.isPending} type="submit">
-          {t("settings.saveChanges")}
+          {m.settings_save_changes()}
         </Button>
       </form>
     </div>
@@ -258,33 +256,15 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
 }
 
 function LanguageSettings() {
-  const t = useT();
-  const { locale, setLocale } = useLocale();
   return (
     <div className="mt-6 rounded-lg border p-6">
-      <h2 className="mb-4 font-semibold text-lg">{t("settings.language")}</h2>
-      <div className="flex gap-2">
-        <Button
-          onClick={() => setLocale("zh")}
-          type="button"
-          variant={locale === "zh" ? "default" : "outline"}
-        >
-          {t("settings.languageZh")}
-        </Button>
-        <Button
-          onClick={() => setLocale("en")}
-          type="button"
-          variant={locale === "en" ? "default" : "outline"}
-        >
-          {t("settings.languageEn")}
-        </Button>
-      </div>
+      <h2 className="mb-4 font-semibold text-lg">{m.settings_language()}</h2>
+      <LanguageSwitcher />
     </div>
   );
 }
 
 function PersonalAccessTokens() {
-  const t = useT();
   const { data, isLoading } = useQuery(listPersonalAccessTokens);
   const queryClient = useQueryClient();
 
@@ -301,7 +281,7 @@ function PersonalAccessTokens() {
         prefix: "gvx_",
       });
       if (error) {
-        throw new Error(error.message || t("settings.failedCreatePat"));
+        throw new Error(error.message || m.settings_failed_create_pat());
       }
       return data;
     },
@@ -311,11 +291,11 @@ function PersonalAccessTokens() {
       });
       setNewlyCreatedToken(data.key);
       setShowNewTokenDialog(false);
-      toast.success(t("settings.tokenCreated"));
+      toast.success(m.settings_token_created());
     },
     onError: (error) => {
       console.log(error);
-      toast.error(error.message || t("settings.failedCreatePat"));
+      toast.error(error.message || m.settings_failed_create_pat());
     },
   });
 
@@ -331,8 +311,8 @@ function PersonalAccessTokens() {
       onSubmit: z.object({
         name: z
           .string()
-          .min(3, t("settings.tokenNameMin"))
-          .max(50, t("settings.tokenNameMax")),
+          .min(3, m.settings_token_name_min())
+          .max(50, m.settings_token_name_max()),
       }),
     },
   });
@@ -345,7 +325,7 @@ function PersonalAccessTokens() {
 
   const handleCopyToken = (token: string) => {
     if (!token) {
-      toast.error(t("settings.noTokenToCopy"));
+      toast.error(m.settings_no_token_to_copy());
       return;
     }
     navigator.clipboard.writeText(token);
@@ -358,24 +338,24 @@ function PersonalAccessTokens() {
       <div className="rounded-lg border p-6">
         <div className="mb-6">
           <h2 className="mb-2 font-semibold text-lg">
-            {t("settings.personalAccessTokens")}
+            {m.settings_personal_access_tokens()}
           </h2>
           <p className="text-muted-foreground text-sm">
-            {t("settings.patDescription")}
+            {m.settings_pat_description()}
           </p>
         </div>
 
         <Button onClick={() => setShowNewTokenDialog(true)}>
-          {t("settings.createToken")}
+          {m.settings_create_token()}
         </Button>
 
         {/* Create Token Dialog */}
         <Dialog onOpenChange={setShowNewTokenDialog} open={showNewTokenDialog}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{t("settings.createPatTitle")}</DialogTitle>
+              <DialogTitle>{m.settings_create_pat_title()}</DialogTitle>
               <DialogDescription>
-                {t("settings.createPatDesc")}
+                {m.settings_create_pat_desc()}
               </DialogDescription>
             </DialogHeader>
             <form
@@ -388,17 +368,17 @@ function PersonalAccessTokens() {
               <form.Field name="name">
                 {(field) => (
                   <div className="space-y-2 py-4">
-                    <Label htmlFor={field.name}>{t("settings.patName")}</Label>
+                    <Label htmlFor={field.name}>{m.settings_pat_name()}</Label>
                     <Input
                       id={field.name}
                       name={field.name}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder={t("settings.patNamePlaceholder")}
+                      placeholder={m.settings_pat_name_placeholder()}
                       value={field.state.value}
                     />
                     <p className="text-muted-foreground text-xs">
-                      {t("settings.patPurpose")}
+                      {m.settings_pat_purpose()}
                     </p>
                     {field.state.meta.errors.map((error) => (
                       <p
@@ -420,10 +400,10 @@ function PersonalAccessTokens() {
                   type="button"
                   variant="outline"
                 >
-                  {t("settings.cancel")}
+                  {m.settings_cancel()}
                 </Button>
                 <Button loading={createPATMutation.isPending} type="submit">
-                  {t("settings.generateToken")}
+                  {m.settings_generate_token()}
                 </Button>
               </DialogFooter>
             </form>
@@ -433,10 +413,10 @@ function PersonalAccessTokens() {
         {newlyCreatedToken && (
           <div className="my-5">
             <h2 className="font-semibold text-lg">
-              {t("settings.generatedToken")}
+              {m.settings_generated_token()}
             </h2>
             <p className="mb-2 text-muted-foreground text-sm">
-              {t("settings.copyNow")}
+              {m.settings_copy_now()}
             </p>
             <div className="flex items-center gap-2">
               <code className="block overflow-x-auto whitespace-nowrap rounded border bg-muted p-2 font-mono text-sm">
@@ -463,7 +443,7 @@ function PersonalAccessTokens() {
       {tokens.length > 0 && (
         <div className="rounded-lg border p-6">
           <h3 className="mb-4 font-semibold text-base">
-            {t("settings.yourTokens")}
+            {m.settings_your_tokens()}
           </h3>
           <div className="space-y-3">
             {tokens.map((token) => (
@@ -472,7 +452,7 @@ function PersonalAccessTokens() {
                 id={token.id}
                 key={token.id}
                 lastRequest={token.lastRequest}
-                name={token.name ?? t("settings.unnamedToken")}
+                name={token.name ?? m.settings_unnamed_token()}
                 start={token.start ?? "gvx_xxx"}
               />
             ))}
@@ -483,8 +463,7 @@ function PersonalAccessTokens() {
   );
 }
 
-const formatDate = (date: Date) =>
-  formatDistanceToNow(date, { addSuffix: true });
+const formatDate = (date: Date) => formatRelative(date);
 
 type TokenCardProps = {
   id: string;
@@ -501,7 +480,6 @@ function TokenCard({
   createdAt,
   lastRequest,
 }: TokenCardProps) {
-  const t = useT();
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
@@ -510,7 +488,7 @@ function TokenCard({
         keyId: tokenId,
       });
       if (error || !data.success) {
-        throw new Error(error?.message || t("settings.failedDeletePat"));
+        throw new Error(error?.message || m.settings_failed_delete_pat());
       }
       await queryClient.refetchQueries({
         queryKey: listPersonalAccessTokens.queryKey,
@@ -518,7 +496,7 @@ function TokenCard({
     },
     onError: (error) => {
       console.log(error);
-      toast.error(error.message || t("settings.failedDeletePat"));
+      toast.error(error.message || m.settings_failed_delete_pat());
     },
   });
   return (
@@ -530,11 +508,11 @@ function TokenCard({
           </div>
           <div className="space-y-1 text-muted-foreground text-xs">
             <p>
-              {t("settings.patCreated")}: {formatDate(createdAt)}
+              {m.settings_pat_created()}: {formatDate(createdAt)}
             </p>
             <p>
-              {t("settings.patLastUsed")}:{" "}
-              {lastRequest ? formatDate(lastRequest) : t("settings.patNever")}
+              {m.settings_pat_last_used()}:{" "}
+              {lastRequest ? formatDate(lastRequest) : m.settings_pat_never()}
             </p>
             <code className="text-xs">{`${start}.....`}</code>
           </div>

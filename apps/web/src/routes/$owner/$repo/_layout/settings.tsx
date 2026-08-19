@@ -27,7 +27,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { useT } from "@/lib/i18n";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/$owner/$repo/_layout/settings")({
   component: RouteComponent,
@@ -40,7 +40,6 @@ type FormValues = z.infer<typeof formSchema>;
 
 function RouteComponent() {
   const { owner, repo } = Route.useParams();
-  const t = useT();
 
   const { data: repository } = useSuspenseQuery(
     getRepoByOwnerAndNameOpts({
@@ -70,7 +69,7 @@ function RouteComponent() {
         },
       }),
     onSuccess: () => {
-      toast.success(t("repoSettings.success"));
+      toast.success(m.repo_settings_success());
     },
     onError: (err) => {
       console.error("Error updating repository:", err);
@@ -94,10 +93,10 @@ function RouteComponent() {
       <div className="space-y-6">
         <div>
           <h1 className="font-bold text-2xl tracking-tight">
-            {t("repoSettings.title")}
+            {m.repo_settings_title()}
           </h1>
           <p className="mt-1 text-muted-foreground">
-            {t("repoSettings.pageDescription")}
+            {m.repo_settings_page_description()}
           </p>
         </div>
 
@@ -109,17 +108,17 @@ function RouteComponent() {
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
               {updateRepoMutation.error.message ??
-                t("repoSettings.failedUpdate")}
+                m.repo_settings_failed_update()}
             </AlertDescription>
           </Alert>
         )}
 
         <div className="space-y-6">
           <div className="space-y-2">
-            <Label>{t("repoSettings.repoName")}</Label>
+            <Label>{m.repo_settings_repo_name()}</Label>
             <Input disabled value={repository.name} />
             <p className="text-muted-foreground text-sm">
-              {t("repoSettings.nameFixed")}
+              {m.repo_settings_name_fixed()}
             </p>
           </div>
 
@@ -132,12 +131,12 @@ function RouteComponent() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("repoSettings.description")}</FormLabel>
+                    <FormLabel>{m.repo_settings_description()}</FormLabel>
                     <FormControl>
                       <Textarea
                         className="resize-none"
                         disabled={isSubmitting}
-                        placeholder={t("repoSettings.descriptionPlaceholder")}
+                        placeholder={m.repo_settings_description_placeholder()}
                         rows={3}
                         {...field}
                       />
@@ -152,7 +151,7 @@ function RouteComponent() {
                 name="isPrivate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("repoSettings.visibility")}</FormLabel>
+                    <FormLabel>{m.repo_settings_visibility()}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         className="w-full gap-2 md:flex"
@@ -166,10 +165,10 @@ function RouteComponent() {
                           <RadioGroupItem value="public" />
                           <div className="flex flex-col gap-1">
                             <p className="text-sm leading-4">
-                              {t("repoSettings.public")}
+                              {m.repo_settings_public()}
                             </p>
                             <p className="text-muted-foreground text-xs">
-                              {t("repoSettings.publicDesc")}
+                              {m.repo_settings_public_desc()}
                             </p>
                           </div>
                         </Label>
@@ -177,10 +176,10 @@ function RouteComponent() {
                           <RadioGroupItem value="private" />
                           <div className="flex flex-col gap-1">
                             <p className="text-sm leading-4">
-                              {t("repoSettings.private")}
+                              {m.repo_settings_private()}
                             </p>
                             <p className="text-muted-foreground text-xs">
-                              {t("repoSettings.privateDesc")}
+                              {m.repo_settings_private_desc()}
                             </p>
                           </div>
                         </Label>
@@ -197,7 +196,7 @@ function RouteComponent() {
                   loading={isSubmitting}
                   type="submit"
                 >
-                  {t("repoSettings.saveChanges")}
+                  {m.repo_settings_save_changes()}
                 </Button>
               </div>
             </form>

@@ -2,9 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRightIcon, GitBranchIcon } from "lucide-react";
 import { NotFoundComponent } from "@/components/404-components";
 import { GitHubIcon } from "@/components/github";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { buttonVariants } from "@/components/ui/button";
 import { UserProfileButton } from "@/components/user-profile-button";
-import { useT } from "@/lib/i18n";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/")({
   component: HomeComponent,
@@ -12,7 +13,6 @@ export const Route = createFileRoute("/")({
 });
 
 function HomeComponent() {
-  const t = useT();
   return (
     <main className="mx-auto mb-30 max-w-11/12 border border-x md:max-w-6xl">
       <div className="sticky top-0 border-b bg-background">
@@ -21,10 +21,11 @@ function HomeComponent() {
             <Link className="flex min-w-0 items-center gap-2 sm:gap-3" to="/">
               <GitBranchIcon className="size-5 shrink-0" />
               <span className="truncate font-semibold text-base sm:text-lg">
-                {t("app.name")}
+                {m.app_name()}
               </span>
             </Link>
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+              <LanguageSwitcher className="w-[88px] sm:w-[110px]" />
               <UserProfileButton />
             </div>
           </div>
@@ -34,15 +35,15 @@ function HomeComponent() {
         <section className="mx-auto max-w-5xl space-y-6 px-4 py-20 sm:py-30">
           <div className="space-y-4">
             <h1 className="font-semibold text-2xl sm:text-4xl">
-              {t("home.tagline")}
+              {m.home_tagline()}
             </h1>
             <p className="max-w-2/3 text-muted-foreground text-sm leading-relaxed sm:text-base">
-              {t("home.description")}
+              {m.home_description()}
             </p>
           </div>
           <div className="flex gap-3">
             <Link className={buttonVariants()} to="/dashboard">
-              {t("home.getStarted")}
+              {m.home_get_started()}
               <ArrowRightIcon />
             </Link>
             <a
@@ -52,7 +53,7 @@ function HomeComponent() {
               target="_blank"
             >
               <GitHubIcon />
-              {t("home.github")}
+              {m.home_github()}
             </a>
           </div>
           <div className="my-14">
@@ -68,26 +69,26 @@ function HomeComponent() {
       </div>
       <div className="border-b">
         <section className="mx-auto my-10 max-w-5xl space-y-6 px-4 sm:my-20">
-          <p className="text-xl">{t("home.featuresTitle")}</p>
+          <p className="text-xl">{m.home_features_title()}</p>
           <h3 className="text-pretty text-lg text-muted-foreground">
-            {t("home.description")}
+            {m.home_description()}
           </h3>
           <div className="space-y-2 leading-relaxed">
             <FeatureRow
-              description={t("home.featureServerlessDesc")}
-              feature={t("home.featureServerless")}
+              description={m.home_feature_serverless_desc()}
+              feature={m.home_feature_serverless()}
             />
             <FeatureRow
-              description={t("home.featureDurableDesc")}
-              feature={t("home.featureDurable")}
+              description={m.home_feature_durable_desc()}
+              feature={m.home_feature_durable()}
             />
             <FeatureRow
-              description={t("home.featureOpenSourceDesc")}
-              feature={t("home.featureOpenSource")}
+              description={m.home_feature_open_source_desc()}
+              feature={m.home_feature_open_source()}
             />
             <FeatureRow
-              description={t("home.featureFastDesc")}
-              feature={t("home.featureFast")}
+              description={m.home_feature_fast_desc()}
+              feature={m.home_feature_fast()}
             />
           </div>
         </section>
@@ -95,31 +96,31 @@ function HomeComponent() {
 
       <div className="border-b">
         <section className="mx-auto my-10 max-w-5xl space-y-6 px-4 sm:my-20">
-          <p className="text-xl">{t("home.builtWith")}</p>
+          <p className="text-xl">{m.home_built_with()}</p>
 
           <div className="space-y-2 leading-relaxed">
             <TechRow
-              description={t("home.techWorkers")}
+              description={m.home_tech_workers()}
               href="https://developers.cloudflare.com/workers/"
               title="Cloudflare Workers"
             />
             <TechRow
-              description={t("home.techDO")}
+              description={m.home_tech_do()}
               href="https://developers.cloudflare.com/durable-objects/"
               title="Cloudflare Durable Objects"
             />
             <TechRow
-              description={t("home.techD1")}
+              description={m.home_tech_d1()}
               href="https://developers.cloudflare.com/d1/"
               title="Cloudflare D1"
             />
             <TechRow
-              description={t("home.techAuth")}
+              description={m.home_tech_auth()}
               href="https://www.better-auth.com/"
               title="Better Auth"
             />
             <TechRow
-              description={t("home.techTanstack")}
+              description={m.home_tech_tanstack()}
               href="https://tanstack.com/start/latest"
               title="Tanstack Start"
             />
@@ -134,13 +135,13 @@ function HomeComponent() {
           rel="noopener noreferrer"
           target="_blank"
         >
-          {t("home.giveStar")} <GitHubIcon className="size-5" />
+          {m.home_give_star()} <GitHubIcon className="size-5" />
         </a>
         <Link
           className="flex h-30 w-full grow items-center justify-center gap-3 text-lg underline-offset-8 hover:bg-accent hover:underline"
           to="/dashboard"
         >
-          {t("home.getStarted")} <ArrowRightIcon className="size-5" />
+          {m.home_get_started()} <ArrowRightIcon className="size-5" />
         </Link>
       </section>
     </main>

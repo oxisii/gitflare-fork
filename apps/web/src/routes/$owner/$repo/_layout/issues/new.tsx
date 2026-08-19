@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useT } from "@/lib/i18n";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/$owner/$repo/_layout/issues/new")({
   component: RouteComponent,
@@ -28,17 +28,16 @@ export const Route = createFileRoute("/$owner/$repo/_layout/issues/new")({
 });
 
 function RouteComponent() {
-  const t = useT();
   const navigate = useNavigate();
   const params = Route.useParams();
 
   const formSchema = z.object({
     title: z
       .string()
-      .min(1, { message: t("issue.titleRequired") })
-      .max(200, { message: t("issue.titleTooLong") }),
+      .min(1, { message: m.issue_title_required() })
+      .max(200, { message: m.issue_title_too_long() }),
     body: z.string().max(10_000, {
-      message: t("issue.descTooLong"),
+      message: m.issue_desc_too_long(),
     }),
   });
 
@@ -63,7 +62,7 @@ function RouteComponent() {
         },
       }),
     onSuccess: () => {
-      toast.success(t("issue.success"));
+      toast.success(m.issue_success());
       form.reset();
       navigate({
         to: "/$owner/$repo/issues",
@@ -92,15 +91,15 @@ function RouteComponent() {
     <div className="container mx-auto my-10 px-5 md:px-0">
       <Card className="mx-auto max-w-3xl bg-background">
         <CardHeader>
-          <CardTitle>{t("issue.createTitle")}</CardTitle>
+          <CardTitle>{m.issue_create_title()}</CardTitle>
         </CardHeader>
         <CardContent>
           {createIssueMutation.error && (
             <Alert className="mb-6" variant="destructive">
               <AlertCircleIcon className="h-4 w-4" />
-              <AlertTitle>{t("issue.error")}</AlertTitle>
+              <AlertTitle>{m.issue_error()}</AlertTitle>
               <AlertDescription>
-                {createIssueMutation.error.message ?? t("issue.failedCreate")}
+                {createIssueMutation.error.message ?? m.issue_failed_create()}
               </AlertDescription>
             </Alert>
           )}
@@ -112,10 +111,10 @@ function RouteComponent() {
                 name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("issue.title")}</FormLabel>
+                    <FormLabel>{m.issue_title()}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={t("issue.titlePlaceholder")}
+                        placeholder={m.issue_title_placeholder()}
                         {...field}
                         disabled={isSubmitting}
                       />
@@ -130,11 +129,11 @@ function RouteComponent() {
                 name="body"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("issue.description")}</FormLabel>
+                    <FormLabel>{m.issue_description()}</FormLabel>
                     <FormControl>
                       <Textarea
                         className="min-h-[200px] resize-y"
-                        placeholder={t("issue.descriptionPlaceholder")}
+                        placeholder={m.issue_description_placeholder()}
                         {...field}
                         disabled={isSubmitting}
                       />
@@ -150,10 +149,10 @@ function RouteComponent() {
                   params={params}
                   to="/$owner/$repo/issues"
                 >
-                  {t("issue.cancel")}
+                  {m.issue_cancel()}
                 </Link>
                 <Button loading={isSubmitting} type="submit">
-                  {t("issue.create")}
+                  {m.issue_create()}
                 </Button>
               </div>
             </form>

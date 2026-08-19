@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { formatDistanceToNow } from "date-fns";
 import {
   BookOpenIcon,
   CheckIcon,
@@ -29,7 +28,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useT } from "@/lib/i18n";
+import { formatRelative } from "@/lib/i18n-format";
+import * as m from "@/paraglide/messages";
 
 const searchSchema = z.object({
   ref: z.string().optional(),
@@ -75,7 +75,6 @@ function IndexPendingComponent() {
 }
 
 function RouteComponent() {
-  const _t = useT();
   const params = Route.useParams();
   const search = Route.useSearch();
   const { owner, repo } = params;
@@ -210,13 +209,12 @@ function RouteComponent() {
 }
 
 function CloneButton({ repoUrl }: { repoUrl: string }) {
-  const t = useT();
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(repoUrl);
     setCopied(true);
-    toast.success(t("repo.copied"));
+    toast.success(m.repo_copied());
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -232,13 +230,13 @@ function CloneButton({ repoUrl }: { repoUrl: string }) {
       <PopoverContent align="end" className="w-100">
         <div className="space-y-3">
           <div>
-            <h4 className="font-semibold text-sm">{t("repo.cloneRepo")}</h4>
+            <h4 className="font-semibold text-sm">{m.repo_clone_repo()}</h4>
             <p className="mt-1 text-muted-foreground text-xs">
-              {t("repo.cloneDesc")}
+              {m.repo_clone_desc()}
             </p>
           </div>
           <div className="space-y-2">
-            <div className="font-medium text-xs">{t("repo.https")}</div>
+            <div className="font-medium text-xs">{m.repo_https()}</div>
             <div className="flex items-center gap-2">
               <div className="flex-1 overflow-x-auto rounded-md border bg-muted px-3 py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <code className="whitespace-nowrap text-xs">{repoUrl}</code>
@@ -323,7 +321,6 @@ function EmptyRepositoryInstructions({
   repo: string;
   isPrivate: boolean;
 }) {
-  const t = useT();
   const data = Route.useLoaderData();
   const url = new URL(data.url);
 
@@ -333,9 +330,9 @@ function EmptyRepositoryInstructions({
     <div>
       <div className="mx-auto space-y-6">
         <div className="text-center">
-          <h2 className="font-bold text-xl">{t("repo.emptyRepo")}</h2>
+          <h2 className="font-bold text-xl">{m.repo_empty_repo()}</h2>
           <p className="mt-2 text-muted-foreground">
-            {t("repo.emptyRepoDesc")}
+            {m.repo_empty_repo_desc()}
           </p>
         </div>
 
@@ -344,9 +341,9 @@ function EmptyRepositoryInstructions({
             <CardTitle className="mb-3">Note</CardTitle>
             <div className="leading-relaxed">
               {isPrivate ? (
-                <p>{t("repo.privateRepoDesc")}</p>
+                <p>{m.repo_private_repo_desc()}</p>
               ) : (
-                <p>{t("repo.publicRepoDesc")}</p>
+                <p>{m.repo_public_repo_desc()}</p>
               )}{" "}
               <p>
                 Create one in{" "}
@@ -354,7 +351,7 @@ function EmptyRepositoryInstructions({
                   className="font-medium underline underline-offset-4"
                   to="/settings"
                 >
-                  {t("repo.createInSettings")}
+                  {m.repo_create_in_settings()}
                 </Link>
               </p>
             </div>
@@ -365,7 +362,7 @@ function EmptyRepositoryInstructions({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TerminalIcon className="size-5" />
-              {t("repo.createNewRepo")}
+              {m.repo_create_new_repo()}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -387,7 +384,7 @@ git push -u origin main`}
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TerminalIcon className="size-4" />
-              {t("repo.pushExisting")}
+              {m.repo_push_existing()}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -413,5 +410,5 @@ function CodeBlock({ code }: { code: string }) {
 
 function formatDate(timestamp: number): string {
   const date = new Date(timestamp * 1000);
-  return formatDistanceToNow(date, { addSuffix: true });
+  return formatRelative(date);
 }

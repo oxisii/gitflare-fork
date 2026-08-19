@@ -28,7 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { useT } from "@/lib/i18n";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_layout/new")({
   component: RouteComponent,
@@ -38,7 +38,6 @@ export const Route = createFileRoute("/_layout/new")({
 type FormValues = z.infer<typeof createRepoSchema>;
 
 function RouteComponent() {
-  const t = useT();
   const navigate = useNavigate();
 
   const form = useForm<FormValues>({
@@ -56,7 +55,7 @@ function RouteComponent() {
         data: values,
       }),
     onSuccess: ({ owner, name }) => {
-      toast.success(t("newRepo.success"));
+      toast.success(m.new_repo_success());
       form.reset();
       navigate({
         to: "/$owner/$repo",
@@ -85,7 +84,7 @@ function RouteComponent() {
     <div className="container mx-auto my-10 px-5 md:px-0">
       <Card className="mx-auto max-w-xl bg-background">
         <CardHeader>
-          <CardTitle>{t("newRepo.title")}</CardTitle>
+          <CardTitle>{m.new_repo_title()}</CardTitle>
           <CardDescription>
             A repository contains all project files, including the revision
             history.
@@ -110,10 +109,10 @@ function RouteComponent() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("newRepo.repositoryName")}</FormLabel>
+                    <FormLabel>{m.new_repo_repository_name()}</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={t("newRepo.repositoryNamePlaceholder")}
+                        placeholder={m.new_repo_repository_name_placeholder()}
                         {...field}
                         disabled={isSubmitting}
                         onChange={(e) => {
@@ -134,11 +133,11 @@ function RouteComponent() {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("newRepo.description")}</FormLabel>
+                    <FormLabel>{m.new_repo_description()}</FormLabel>
                     <FormControl>
                       <Textarea
                         className="resize-none"
-                        placeholder={t("newRepo.descriptionPlaceholder")}
+                        placeholder={m.new_repo_description_placeholder()}
                         {...field}
                         disabled={isSubmitting}
                       />
@@ -153,7 +152,7 @@ function RouteComponent() {
                 name="isPrivate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("newRepo.visibility")}</FormLabel>
+                    <FormLabel>{m.new_repo_visibility()}</FormLabel>
                     <FormControl>
                       <RadioGroup
                         className="w-full gap-2 md:flex"
@@ -167,10 +166,10 @@ function RouteComponent() {
                           <RadioGroupItem value="public" />
                           <div className="flex flex-col gap-1">
                             <p className="text-sm leading-4">
-                              {t("newRepo.public")}
+                              {m.new_repo_public()}
                             </p>
                             <p className="text-muted-foreground text-xs">
-                              {t("newRepo.publicDesc")}
+                              {m.new_repo_public_desc()}
                             </p>
                           </div>
                         </Label>
@@ -178,10 +177,10 @@ function RouteComponent() {
                           <RadioGroupItem value="private" />
                           <div className="flex flex-col gap-1">
                             <p className="text-sm leading-4">
-                              {t("newRepo.private")}
+                              {m.new_repo_private()}
                             </p>
                             <p className="text-muted-foreground text-xs">
-                              {t("newRepo.privateDesc")}
+                              {m.new_repo_private_desc()}
                             </p>
                           </div>
                         </Label>
@@ -194,7 +193,7 @@ function RouteComponent() {
 
               <div className="flex justify-end">
                 <Button loading={isSubmitting} type="submit">
-                  {t("newRepo.create")}
+                  {m.new_repo_create()}
                 </Button>
               </div>
             </form>

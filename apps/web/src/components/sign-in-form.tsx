@@ -3,7 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { authClient } from "@/lib/auth-client";
-import { useT } from "@/lib/i18n";
+import * as m from "@/paraglide/messages";
 import { Button, buttonVariants } from "./ui/button";
 import {
   Card,
@@ -16,7 +16,6 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
 export default function SignInForm() {
-  const t = useT();
   const navigate = useNavigate();
 
   const form = useForm({
@@ -35,7 +34,7 @@ export default function SignInForm() {
             navigate({
               to: "/dashboard",
             });
-            toast.success(t("signIn.success"));
+            toast.success(m.sign_in_success());
           },
           onError: (error) => {
             toast.error(error.error.message || error.error.statusText);
@@ -45,8 +44,8 @@ export default function SignInForm() {
     },
     validators: {
       onSubmit: z.object({
-        email: z.email(t("signIn.invalidEmail")),
-        password: z.string().min(8, t("signIn.shortPassword")),
+        email: z.email(m.sign_in_invalid_email()),
+        password: z.string().min(8, m.sign_in_short_password()),
       }),
     },
   });
@@ -54,8 +53,8 @@ export default function SignInForm() {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle>{t("signIn.title")}</CardTitle>
-        <CardDescription>{t("signIn.description")}</CardDescription>
+        <CardTitle>{m.sign_in_title()}</CardTitle>
+        <CardDescription>{m.sign_in_description()}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -70,13 +69,13 @@ export default function SignInForm() {
             <form.Field name="email">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>{t("signIn.email")}</Label>
+                  <Label htmlFor={field.name}>{m.sign_in_email()}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder={t("signIn.emailPlaceholder")}
+                    placeholder={m.sign_in_email_placeholder()}
                     type="email"
                     value={field.state.value}
                   />
@@ -94,13 +93,13 @@ export default function SignInForm() {
             <form.Field name="password">
               {(field) => (
                 <div className="space-y-2">
-                  <Label htmlFor={field.name}>{t("signIn.password")}</Label>
+                  <Label htmlFor={field.name}>{m.sign_in_password()}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    placeholder={t("signIn.passwordPlaceholder")}
+                    placeholder={m.sign_in_password_placeholder()}
                     type="password"
                     value={field.state.value}
                   />
@@ -122,7 +121,7 @@ export default function SignInForm() {
                 loading={state.isSubmitting}
                 type="submit"
               >
-                {t("signIn.login")}
+                {m.sign_in_login()}
               </Button>
             )}
           </form.Subscribe>
@@ -130,7 +129,7 @@ export default function SignInForm() {
 
         <div className="mt-4 text-center">
           <Link className={buttonVariants({ variant: "link" })} to="/signup">
-            {t("signIn.needAccount")}
+            {m.sign_in_need_account()}
           </Link>
         </div>
       </CardContent>

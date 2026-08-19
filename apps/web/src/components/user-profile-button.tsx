@@ -15,13 +15,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/lib/auth-client";
-import { useLocale, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import * as m from "@/paraglide/messages";
+import { getLocale, setLocale } from "@/paraglide/runtime";
 import { Skeleton } from "./ui/skeleton";
 
 export function UserProfileButton() {
-  const t = useT();
-  const { locale, setLocale } = useLocale();
+  const locale = getLocale();
   const { data, isLoading } = useQuery(getSessionOptions);
 
   // here we explicitly check for undefined and null
@@ -35,7 +35,7 @@ export function UserProfileButton() {
   if (!isLoading && data === null) {
     return (
       <Link className={buttonVariants({ variant: "outline" })} to="/login">
-        {t("nav.signIn")}
+        {m.nav_sign_in()}
       </Link>
     );
   }
@@ -52,7 +52,7 @@ export function UserProfileButton() {
         to="/new"
       >
         <PlusIcon />
-        <span className="sr-only">{t("nav.new")}</span>
+        <span className="sr-only">{m.nav_new()}</span>
       </Link>
       <Link
         className={cn(
@@ -61,7 +61,7 @@ export function UserProfileButton() {
         )}
         to="/new"
       >
-        <PlusIcon /> {t("nav.new")}
+        <PlusIcon /> {m.nav_new()}
       </Link>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -91,19 +91,19 @@ export function UserProfileButton() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link to="/dashboard">{t("nav.dashboard")}</Link>
+            <Link to="/dashboard">{m.nav_dashboard()}</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link params={{ owner: user?.username ?? "" }} to="/$owner">
-              {t("nav.profile")}
+              {m.nav_profile()}
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/settings">{t("nav.settings")}</Link>
+            <Link to="/settings">{m.nav_settings()}</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuLabel className="text-muted-foreground text-xs">
-            {t("settings.language")}
+            {m.settings_language()}
           </DropdownMenuLabel>
           <DropdownMenuRadioGroup
             onValueChange={(value) => {
@@ -114,10 +114,10 @@ export function UserProfileButton() {
             value={locale}
           >
             <DropdownMenuRadioItem value="zh">
-              {t("settings.languageZh")}
+              {m.settings_language_zh()}
             </DropdownMenuRadioItem>
             <DropdownMenuRadioItem value="en">
-              {t("settings.languageEn")}
+              {m.settings_language_en()}
             </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
           <DropdownMenuSeparator />
@@ -127,7 +127,7 @@ export function UserProfileButton() {
               window.location.href = "/";
             }}
           >
-            {t("nav.signOut")}
+            {m.nav_sign_out()}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

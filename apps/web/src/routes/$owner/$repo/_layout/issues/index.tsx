@@ -1,11 +1,11 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { formatDistanceToNow } from "date-fns";
 import { getIssuesByRepoOptions } from "@/api/issues";
 import { NotFoundComponent } from "@/components/404-components";
 import { buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useT } from "@/lib/i18n";
+import { formatRelative } from "@/lib/i18n-format";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/$owner/$repo/_layout/issues/")({
   component: RouteComponent,
@@ -22,7 +22,6 @@ export const Route = createFileRoute("/$owner/$repo/_layout/issues/")({
 });
 
 function RouteComponent() {
-  const t = useT();
   const params = Route.useParams();
   const { data: issues } = useSuspenseQuery(
     getIssuesByRepoOptions({
@@ -34,25 +33,25 @@ function RouteComponent() {
   return (
     <div className="mx-auto max-w-5xl space-y-4">
       <div className="flex items-center justify-between pb-4">
-        <h2 className="font-semibold text-xl">{t("issues.title")}</h2>
+        <h2 className="font-semibold text-xl">{m.issues_title()}</h2>
         <Link
           className={buttonVariants({ size: "sm" })}
           params={params}
           to="/$owner/$repo/issues/new"
         >
-          {t("issues.newIssue")}
+          {m.issues_new_issue()}
         </Link>
       </div>
 
       {issues.length === 0 && (
         <div className="space-y-4 rounded-lg border bg-card p-12 text-center">
-          <p className="text-muted-foreground">{t("issues.noIssues")}</p>
+          <p className="text-muted-foreground">{m.issues_no_issues()}</p>
           <Link
             className={buttonVariants()}
             params={params}
             to="/$owner/$repo/issues/new"
           >
-            {t("issues.createIssue")}
+            {m.issues_create_issue()}
           </Link>
         </div>
       )}
@@ -76,10 +75,8 @@ function RouteComponent() {
                   <span>#{issue.number}</span>
                   <span>•</span>
                   <span>
-                    {issue.creatorUsername} {t("issues.opened")}{" "}
-                    {formatDistanceToNow(new Date(issue.createdAt), {
-                      addSuffix: true,
-                    })}
+                    {issue.creatorUsername} {m.issues_opened()}{" "}
+                    {formatRelative(new Date(issue.createdAt))}
                   </span>
                 </div>
               </div>

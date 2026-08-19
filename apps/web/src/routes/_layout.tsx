@@ -1,8 +1,9 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { GitBranchIcon } from "lucide-react";
 import { ErrorComponent } from "@/components/error-component";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { UserProfileButton } from "@/components/user-profile-button";
-import { useT } from "@/lib/i18n";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_layout")({
   component: RouteComponent,
@@ -10,7 +11,6 @@ export const Route = createFileRoute("/_layout")({
 });
 
 function RouteComponent() {
-  const t = useT();
   return (
     <>
       <div className="border-b py-3">
@@ -19,10 +19,11 @@ function RouteComponent() {
             <Link className="flex min-w-0 items-center gap-2 sm:gap-3" to="/">
               <GitBranchIcon className="size-5 shrink-0" />
               <span className="truncate font-semibold text-base sm:text-lg">
-                {t("app.name")}
+                {m.app_name()}
               </span>
             </Link>
             <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+              <LanguageSwitcher className="w-[88px] sm:w-[110px]" />
               <UserProfileButton />
             </div>
           </div>

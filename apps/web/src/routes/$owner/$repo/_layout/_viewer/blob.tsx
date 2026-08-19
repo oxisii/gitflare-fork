@@ -19,8 +19,8 @@ import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Skeleton } from "@/components/ui/skeleton";
 import { diffsStyleVariables, fileOptions } from "@/lib/diffs-config";
-import { useT } from "@/lib/i18n";
 import { formatBytes, getMimeType } from "@/lib/utils";
+import * as m from "@/paraglide/messages";
 
 const LazyDiffsFile = lazy(() =>
   import("@pierre/diffs/react").then((m) => ({ default: m.File }))
@@ -65,7 +65,6 @@ function BlobPendingComponent() {
 }
 
 function RouteComponent() {
-  const t = useT();
   const params = Route.useParams();
   const search = Route.useSearch();
   const { owner, repo } = params;
@@ -88,10 +87,10 @@ function RouteComponent() {
         <div className="flex flex-col items-center justify-center rounded-lg border py-12 text-center">
           <FileIcon className="mb-4 size-12 text-muted-foreground" />
           <h3 className="mb-2 font-semibold text-lg">
-            {t("blob.fileNotFound")}
+            {m.blob_file_not_found()}
           </h3>
           <p className="text-muted-foreground text-sm">
-            {t("blob.fileNotFoundDesc")}
+            {m.blob_file_not_found_desc()}
           </p>
         </div>
       </div>
@@ -173,7 +172,7 @@ function RouteComponent() {
                 target="_blank"
                 to="/$owner/$repo/raw"
               >
-                {t("blob.raw")}
+                {m.blob_raw()}
               </Link>
             </Button>
             {!blob.isBinary && (
@@ -256,7 +255,6 @@ function BlobContent({
   contentBase64,
   size,
 }: BlobContentProps) {
-  const t = useT();
   const isMarkdown = filename.toLowerCase().match(/\.(md|mdx|markdown)$/);
   const isImage = filename
     .toLowerCase()
@@ -282,9 +280,9 @@ function BlobContent({
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <FileIcon className="mb-4 size-12 text-muted-foreground" />
-        <h3 className="mb-2 font-semibold text-lg">{t("blob.binaryFile")}</h3>
+        <h3 className="mb-2 font-semibold text-lg">{m.blob_binary_file()}</h3>
         <p className="text-muted-foreground text-sm">
-          {t("blob.binaryFileDesc")}
+          {m.blob_binary_file_desc()}
         </p>
         <p className="mt-2 text-muted-foreground text-xs">
           Size: {formatBytes(size, { decimals: 2 })}

@@ -16,13 +16,16 @@ import { useEffect, useState } from "react";
 import { getSessionOptions } from "@/api/session";
 import { NotFoundComponent } from "@/components/404-components";
 import { Toaster } from "@/components/ui/sonner";
-import { I18nProvider, useLocale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import * as m from "@/paraglide/messages";
+import { getLocale } from "@/paraglide/runtime";
 import appCss from "../index.css?url";
 
 export type RouterAppContext = {
   queryClient: QueryClient;
 };
+
+const SITE_URL = "https://gitflare.mdhruvil.com";
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
   head: () => ({
@@ -35,28 +38,31 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Gitflare",
+        title: m.common_title(),
       },
       {
         property: "og:title",
-        content: "Gitflare",
+        content: m.common_title(),
       },
       {
         property: "og:description",
-        content:
-          "Gitflare is a fully open-source serverless git hosting platform. No VMs, No Containers, Just Durable Objects.",
+        content: m.common_description(),
       },
       {
         property: "og:image",
-        content: "https://gitflare.mdhruvil.com/og.png",
+        content: `${SITE_URL}/og.png`,
       },
       {
         property: "og:url",
-        content: "https://gitflare.mdhruvil.com",
+        content: SITE_URL,
       },
       {
         property: "og:type",
         content: "website",
+      },
+      {
+        name: "description",
+        content: m.common_description(),
       },
       {
         property: "twitter:card",
@@ -64,7 +70,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
       },
       {
         property: "twitter:image",
-        content: "https://gitflare.mdhruvil.com/og.png",
+        content: `${SITE_URL}/og.png`,
       },
     ],
     links: [
@@ -99,6 +105,21 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
         href: "/logo.svg",
         type: "image/svg+xml",
       },
+      {
+        rel: "alternate",
+        hrefLang: "en",
+        href: SITE_URL,
+      },
+      {
+        rel: "alternate",
+        hrefLang: "zh",
+        href: `${SITE_URL}/zh`,
+      },
+      {
+        rel: "alternate",
+        hrefLang: "x-default",
+        href: SITE_URL,
+      },
     ],
   }),
   loader: async ({ context: { queryClient } }) => {
@@ -109,15 +130,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootDocument() {
-  return (
-    <I18nProvider>
-      <RootHtml />
-    </I18nProvider>
-  );
-}
-
-function RootHtml() {
-  const { locale } = useLocale();
+  const locale = getLocale();
   const isLoading = useRouterState({
     select: (s) => s.status === "pending",
   });

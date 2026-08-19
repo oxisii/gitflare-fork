@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { format, formatDistanceToNow } from "date-fns";
 import { CheckIcon, CopyIcon, GitCommitIcon } from "lucide-react";
 import { type MouseEventHandler, useState } from "react";
 import * as z from "zod";
@@ -9,8 +8,9 @@ import { NotFoundComponent } from "@/components/404-components";
 import { BranchSelector } from "@/components/branch-selector";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useT } from "@/lib/i18n";
+import { formatDate, formatRelative } from "@/lib/i18n-format";
 import { cn } from "@/lib/utils";
+import * as m from "@/paraglide/messages";
 
 const searchSchema = z.object({
   ref: z.string().optional(),
@@ -92,7 +92,7 @@ function CommitsPendingComponent() {
 
 function formatRelativeTime(timestamp: number): string {
   const date = new Date(timestamp * 1000);
-  return formatDistanceToNow(date, { addSuffix: true });
+  return formatRelative(date);
 }
 
 function formatCommitDate(timestamp: number): string {
@@ -100,7 +100,7 @@ function formatCommitDate(timestamp: number): string {
   const now = new Date();
   const isThisYear = date.getFullYear() === now.getFullYear();
 
-  return format(date, isThisYear ? "MMM d" : "MMM d, yyyy");
+  return formatDate(date, isThisYear ? "MMM d" : "MMM d, yyyy");
 }
 
 function copyToClipboard(text: string) {
@@ -131,7 +131,6 @@ function CopyButton({ text }: { text: string }) {
 }
 
 function RouteComponent() {
-  const t = useT();
   const params = Route.useParams();
   const { owner, repo } = params;
   const { ref } = Route.useSearch();
@@ -165,7 +164,7 @@ function RouteComponent() {
     <div className="py-6">
       {/* Branch Selector */}
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="font-semibold text-2xl">{t("commits.title")}</h1>
+        <h1 className="font-semibold text-2xl">{m.commits_title()}</h1>
         <BranchSelector
           onBranchChange={(newBranch) => {
             navigate({
@@ -185,7 +184,7 @@ function RouteComponent() {
             {/* Date Header */}
             <div className="mb-3 flex items-center gap-2">
               <h2 className="font-semibold text-foreground text-sm">
-                {t("commits.commitsOn", { date })}
+                {m.commits_commits_on({ date })}
               </h2>
             </div>
 
@@ -232,7 +231,7 @@ function RouteComponent() {
                           <span className="font-medium">
                             {commit.commit.author.name}
                           </span>
-                          <span>{t("commits.committed")}</span>
+                          <span>{m.commits_committed()}</span>
                           <span>
                             {formatRelativeTime(commit.commit.author.timestamp)}
                           </span>
@@ -256,10 +255,10 @@ function RouteComponent() {
           <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-12 text-center">
             <GitCommitIcon className="mb-4 size-12 text-muted-foreground" />
             <h3 className="mb-2 font-semibold text-lg">
-              {t("commits.noCommits")}
+              {m.commits_no_commits()}
             </h3>
             <p className="text-muted-foreground text-sm">
-              {t("commits.noCommitsDesc")}
+              {m.commits_no_commits_desc()}
             </p>
           </div>
         )}

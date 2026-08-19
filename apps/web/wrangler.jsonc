@@ -15,8 +15,8 @@
   },
   "vars": {
     "LOG_LEVEL": "warn",
-    "SITE_URL": "https://gitflare-web-prod.owarp.workers.dev",
-    "VITE_BETTER_AUTH_URL": "https://gitflare-web-prod.owarp.workers.dev",
+    "SITE_URL": "https://git.warp.dpdns.org",
+    "VITE_BETTER_AUTH_URL": "https://git.warp.dpdns.org",
     "BETTER_AUTH_SECRET": "9ecb59bf7e9ae8494976799ac6201fcf61b3f872725ab85deeac1250224b9532"
   },
   "durable_objects": {

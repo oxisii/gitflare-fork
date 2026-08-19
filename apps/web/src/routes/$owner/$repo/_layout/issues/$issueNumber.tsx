@@ -1,6 +1,5 @@
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { formatDistanceToNow } from "date-fns";
 import { CircleCheckIcon, CircleDotIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -13,8 +12,9 @@ import { NotFoundComponent } from "@/components/404-components";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useT } from "@/lib/i18n";
+import { formatRelative } from "@/lib/i18n-format";
 import { cn } from "@/lib/utils";
+import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute(
   "/$owner/$repo/_layout/issues/$issueNumber"
@@ -42,7 +42,6 @@ function RouteComponent() {
     })
   );
   const [commentBody, setCommentBody] = useState("");
-  const t = useT();
 
   const addCommentMutation = useMutation({
     mutationFn: async (body: string) =>
@@ -97,7 +96,7 @@ function RouteComponent() {
   const isSubmitting = addCommentMutation.isPending;
 
   const statusLabel =
-    issue.status === "open" ? t("issue.open") : t("issue.closed");
+    issue.status === "open" ? m.issue_open() : m.issue_closed();
 
   const issueIconMap = {
     open: CircleDotIcon,
@@ -136,7 +135,7 @@ function RouteComponent() {
 
         {/* Comments Section */}
         <h3 className="font-semibold text-sm">
-          {t("issue.comments", { count: issue.comments.length })}
+          {m.issue_comments({ count: issue.comments.length })}
         </h3>
         {issue.comments.length > 0 ? (
           <div className="space-y-4">
@@ -153,7 +152,7 @@ function RouteComponent() {
         ) : (
           <div className="flex items-center justify-center rounded-lg border border-dashed py-8">
             <p className="text-muted-foreground text-sm">
-              {t("issue.noComments")}
+              {m.issue_no_comments()}
             </p>
           </div>
         )}
@@ -164,7 +163,7 @@ function RouteComponent() {
             className="resize-none"
             disabled={isSubmitting}
             onChange={(e) => setCommentBody(e.target.value)}
-            placeholder={t("issue.addComment")}
+            placeholder={m.issue_add_comment()}
             rows={4}
             value={commentBody}
           />
@@ -182,7 +181,7 @@ function RouteComponent() {
                     "text-green-500": issue.status === "closed",
                   })}
                 />
-                {issue.status === "open" ? t("issue.close") : t("issue.reopen")}
+                {issue.status === "open" ? m.issue_close() : m.issue_reopen()}
               </Button>
             )}
             <div className="flex gap-2">
@@ -191,14 +190,14 @@ function RouteComponent() {
                 onClick={handleCancel}
                 variant="outline"
               >
-                {t("issue.cancel")}
+                {m.issue_cancel()}
               </Button>
               <Button
                 loading={isSubmitting}
                 onClick={handleSubmitComment}
                 type="button"
               >
-                {t("issue.comment")}
+                {m.issue_comment()}
               </Button>
             </div>
           </div>
@@ -221,21 +220,18 @@ export function Comment({
   creatorUsername,
   _creationTime,
 }: CommentProp) {
-  const t = useT();
   return (
     <div className="overflow-hidden rounded-lg border bg-card">
       <div className="flex items-center gap-2 border-b px-3 py-2">
         <p className="font-semibold text-sm">{creatorUsername}</p>
         <p className="text-muted-foreground text-xs">
-          {type === "description" ? t("issue.created") : t("issue.commented")}{" "}
-          {formatDistanceToNow(new Date(_creationTime), {
-            addSuffix: true,
-          })}
+          {type === "description" ? m.issue_created() : m.issue_commented()}{" "}
+          {formatRelative(new Date(_creationTime))}
         </p>
       </div>
 
       <div className="prose prose-sm dark:prose-invert bg-background px-3 py-2">
-        {content ?? t("issue.noContent")}
+        {content ?? m.issue_no_content()}
       </div>
     </div>
   );

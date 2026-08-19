@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/cloudflare";
 import handler from "@tanstack/react-start/server-entry";
+import { paraglideMiddleware } from "./paraglide/server.js";
 
 export default Sentry.withSentry(
   () => ({
@@ -13,13 +14,16 @@ export default Sentry.withSentry(
   }),
   {
     async fetch(req) {
-      try {
-        return await handler.fetch(req);
-      } catch (error) {
-        Sentry.captureException(error);
-
-        throw error;
-      }
+      // TanStack Router rewrites URLs itself — pass the original request
+      // to avoid a redirect loop with paraglideMiddleware's de-localization.
+      return paraglideMiddleware(req, async () => {
+        try {
+          return await handler.fetch(req);
+        } catch (error) {
+          Sentry.captureException(error);
+          throw error;
+        }
+      });
     },
   }
 );
