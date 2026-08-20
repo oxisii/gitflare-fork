@@ -1,8 +1,7 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { GitBranchIcon, LockIcon } from "lucide-react";
 import { getReposByOwnerOpts } from "@/api/repos";
-import { getSessionOptions } from "@/api/session";
 import { NotFoundComponent } from "@/components/404-components";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -11,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { avatarSrc } from "@/lib/avatar";
 import * as m from "@/paraglide/messages";
 
 export const Route = createFileRoute("/_layout/$owner")({
@@ -29,16 +27,16 @@ function RouteComponent() {
   const { data: repositories } = useSuspenseQuery(
     getReposByOwnerOpts({ owner })
   );
-  const { data: session } = useQuery(getSessionOptions);
-  const image =
-    session?.user?.username === owner ? session.user.image : undefined;
 
   return (
     <div className="py-8">
       <div className="grid gap-8 md:grid-cols-4">
         <div className="col-span-1">
           <Avatar className="mb-4 size-48 rounded-full">
-            <AvatarImage alt={`@${owner}`} src={avatarSrc(image)} />
+            <AvatarImage
+              alt={`@${owner}`}
+              src={`https://api.dicebear.com/9.x/notionists/svg?seed=${owner}&scale=150&backgroundType=solid,gradientLinear&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
+            />
             <AvatarFallback>
               {owner
                 .split(" ")

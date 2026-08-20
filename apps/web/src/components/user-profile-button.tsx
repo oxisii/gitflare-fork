@@ -14,7 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { avatarSrc } from "@/lib/avatar";
 import { authClient } from "@/lib/auth-client";
 import { isAppLocale, persistLocale } from "@/lib/locale-preference";
 import { cn } from "@/lib/utils";
@@ -71,7 +70,7 @@ export function UserProfileButton() {
             <Avatar className="h-10 w-10">
               <AvatarImage
                 alt={`@${user?.username}`}
-                src={avatarSrc(user?.image)}
+                src={`https://api.dicebear.com/9.x/notionists/svg?seed=${user?.username}&scale=150&backgroundType=solid,gradientLinear&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
               />
               <AvatarFallback>
                 {user?.name
