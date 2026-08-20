@@ -15,6 +15,7 @@ import { LoaderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getSessionOptions } from "@/api/session";
 import { NotFoundComponent } from "@/components/404-components";
+import { FaviconSync } from "@/components/favicon-sync";
 import { LocaleSync } from "@/components/language-switcher";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
@@ -180,6 +181,7 @@ function RootDocument() {
         )}
         <Outlet />
         <LocaleSync />
+        <FaviconSync />
         <Toaster richColors />
         <TanStackRouterDevtools position="bottom-left" />
         <Scripts />

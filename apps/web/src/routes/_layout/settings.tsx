@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authClient } from "@/lib/auth-client";
+import { avatarSrc } from "@/lib/avatar";
 import { formatRelative } from "@/lib/i18n-format";
 import * as m from "@/paraglide/messages";
 
@@ -118,6 +119,7 @@ function RouteComponent() {
         <TabsContent value="profile">
           <ProfileSettings
             email={user?.email ?? "NO_EMAIL"}
+            image={user?.image ?? ""}
             name={user?.name ?? "NO_NAME"}
             username={user?.username ?? "NO_USERNAME"}
           />
@@ -136,15 +138,17 @@ type ProfileSettingsProps = {
   name: string;
   email: string;
   username: string;
+  image: string;
 };
 
-function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
+function ProfileSettings({ name, email, username, image }: ProfileSettingsProps) {
   const queryClient = useQueryClient();
 
   const updateProfileMutation = useMutation({
-    mutationFn: async (data: { name: string }) => {
+    mutationFn: async (data: { name: string; image: string }) => {
       const result = await authClient.updateUser({
         name: data.name,
+        image: data.image.trim() || "",
       });
       if (result.error) {
         throw new Error(
@@ -167,6 +171,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
   const form = useForm({
     defaultValues: {
       name,
+      image,
     },
     onSubmit: async ({ value }) => {
       await updateProfileMutation.mutateAsync(value);
@@ -174,6 +179,12 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
     validators: {
       onSubmit: z.object({
         name: z.string().min(2, m.settings_name_min()),
+        image: z
+          .string()
+          .refine(
+            (v) => v.trim() === "" || /^https?:\/\//.test(v.trim()),
+            m.settings_avatar_url_invalid()
+          ),
       }),
     },
   });
@@ -186,10 +197,7 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
 
       <div className="mb-6 flex items-center gap-4">
         <Avatar className="h-20 w-20">
-          <AvatarImage
-            alt={`@${username}`}
-            src={`https://api.dicebear.com/9.x/notionists/svg?seed=${username}&scale=150&backgroundType=solid,gradientLinear&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
-          />
+          <AvatarImage alt={`@${username}`} src={avatarSrc(image)} />
           <AvatarFallback>
             {name
               .split(" ")
@@ -224,6 +232,31 @@ function ProfileSettings({ name, email, username }: ProfileSettingsProps) {
                   placeholder={name}
                   value={field.state.value}
                 />
+                {field.state.meta.errors.map((error) => (
+                  <p className="text-red-500 text-sm" key={error?.message}>
+                    {error?.message}
+                  </p>
+                ))}
+              </div>
+            )}
+          </form.Field>
+        </div>
+        <div>
+          <form.Field name="image">
+            {(field) => (
+              <div className="space-y-2">
+                <Label htmlFor={field.name}>{m.settings_avatar_url()}</Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  placeholder="https://"
+                  value={field.state.value}
+                />
+                <p className="text-muted-foreground text-xs">
+                  {m.settings_avatar_url_hint()}
+                </p>
                 {field.state.meta.errors.map((error) => (
                   <p className="text-red-500 text-sm" key={error?.message}>
                     {error?.message}
